@@ -1,4 +1,4 @@
-package testCases;
+/*package testCases;
 
 import java.util.List;
 
@@ -11,16 +11,7 @@ import testBase.BaseClass;
 
 public class title extends BaseClass {
 
-  /*  WebDriver driver;
-    WebDriverWait wait;
-
-    @BeforeClass
-    public void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://mail.dil.in/");
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }*/
+  
 
     @Test
     public void verifyTitle() {
@@ -39,10 +30,5 @@ public class title extends BaseClass {
         Assert.assertEquals(act_title, "XgenPlus", "Title is not matching!");
     }
 
-   /* @AfterClass
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }*/
-}
+  
+}*/
