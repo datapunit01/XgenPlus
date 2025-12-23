@@ -4,14 +4,15 @@
   <test thread-count="3" parallel="tests" name="ChromeTest(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="testCases.HomePageTest">
+      <class name="testCases.T002_HomePageTest">
         <methods>
+          <include name="verify_HomePage"/>
           <include name="tearDown"/>
+          <include name="sendLogsAfterSuite"/>
           <include name="switchToLoginFrame"/>
           <include name="setup"/>
-          <include name="verify_HomePage"/>
         </methods>
-      </class> <!-- testCases.HomePageTest -->
+      </class> <!-- testCases.T002_HomePageTest -->
     </classes>
   </test> <!-- ChromeTest(failed) -->
 </suite> <!-- Failed suite [CrossBrowserSuite] -->

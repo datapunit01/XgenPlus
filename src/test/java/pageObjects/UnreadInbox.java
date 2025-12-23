@@ -156,9 +156,9 @@ public class UnreadInbox extends BasePage
     	ruse.clickReChkMainBox();
     }
 	
-	public boolean areAllEmailsSelectedViaAllForUnReadInbox() 
+	public boolean areAllEmailsSelectedViaAllForUnReadInbox() throws InterruptedException 
     {
-       return ruse.areReAllEmailsSelectedViaAll();        
+       return ruse.areAllEmailsSelectedViaAllRe();        
     }
 	
 	public void clickChkMainBoxforUncheckForUnReadInbox() throws InterruptedException 
@@ -168,7 +168,7 @@ public class UnreadInbox extends BasePage
 	
 	public boolean areAllEmailsUnselectedViaAllForUnReadInbox() 
     {
-        return ruse.areReAllEmailsUnselectedViaAll();           
+        return ruse.areAllEmailsUnselectedViaAllRe();           
     }
 	
 	public boolean isDrpDownBtnDisplayedForUnReadInbox()
@@ -209,6 +209,8 @@ public class UnreadInbox extends BasePage
     {
         ruse.moveToTrashRe();
     }
+    
+   
     
 
     

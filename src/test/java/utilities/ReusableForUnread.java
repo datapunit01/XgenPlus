@@ -2,16 +2,23 @@ package utilities;
 
 import java.io.IOException;
 import java.net.IDN;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import pageObjects.BasePage;
@@ -23,12 +30,17 @@ public class ReusableForUnread extends BasePage {
 	String userNameWithPunnycode = p.getProperty("email1");
 	String userName1 = IDN.toUnicode(userNameWithPunnycode);
 	String alertMsgEmail = p.getProperty("alertMessage");
+	String invalidMailForTo = p.getProperty("invalidTo");
+	String invalidErrorMessageTextForTo = p.getProperty("invalidErrorMessageForTo");
 
 	List<WebElement> rows;
 
 	public ReusableForUnread(ThreadLocal<WebDriver> driver) throws IOException {
 		super(driver.get());
 	}
+	
+	public static final Logger log = LogManager.getLogger(ReusableForUnread.class);
+	
 
 	@FindBy(xpath = "//span[starts-with(@id, 'SpnNew-1-')]")
 	public WebElement UnReadInboxBtn;
@@ -112,8 +124,8 @@ public class ReusableForUnread extends BasePage {
 	public WebElement moveToSecureBtn;
 
 	@FindBy(xpath = "//div[@id='mCSB_1_container']//li[contains(text(),'Secure')]")
-	public WebElement moveToSpamPromoBtn;	
-	
+	public WebElement moveToSpamPromoBtn;
+
 	String moveToDynamicFoldersBtn = "//div[@id='mCSB_1_container']/li";
 
 	@FindBy(xpath = "//a[@class='xgenDropBlockIcon']//span[1]")
@@ -143,6 +155,8 @@ public class ReusableForUnread extends BasePage {
 	String parentRowForBlockPage = "./ancestor::tr";
 
 	String childRowForBlockPage = ".//font[@class='F3' and @title]";
+	
+	public String selectedCheckboxMailId ="//p[@id='fromto0' and @class='FB']//font[@class='F3']" ;
 
 	@FindBy(xpath = "//input[@id='confirmblockEmails']")
 	public WebElement blockpageBlockBtn;
@@ -178,7 +192,7 @@ public class ReusableForUnread extends BasePage {
 	public WebElement selectedEmailRead;
 
 	// --- All individual email checkboxes ---
-	@FindBy(xpath = "//tr[@class='MOVEABLETR' and contains(@id,'MailRowId') and (@style='background-color: rgba(196, 196, 196, 0.1); cursor: pointer;' or @style='background-color: rgba(196, 196, 196, 0.2); cursor: pointer;')]")
+	@FindBy(xpath = "//tr[@class='MOVEABLETR' and contains(@id,'MailRowId') and (contains(@style,'rgba(196, 196, 196, 0.1') or contains(@style,'rgba(196, 196, 196, 0.2'))]")
 	List<WebElement> emailCheckboxesAll;
 
 	@FindBy(xpath = "//tr[@class='MOVEABLETR' and contains(@id,'MailRowId')]")
@@ -232,6 +246,12 @@ public class ReusableForUnread extends BasePage {
 	@FindBy(xpath = "//span[text()='Sent']")
 	public WebElement sentBtn;
 
+	@FindBy(xpath = "//p[@id='subject0']//font")
+	public WebElement sentSubjectText;
+
+	@FindBy(xpath = "//td[@id='CellE1']")
+	public WebElement mailDateAndTimeofFirst;
+
 	@FindBy(xpath = "//span[starts-with(@id, 'SpnNew-2-')]")
 	public WebElement sentUnreadBtn;
 
@@ -261,9 +281,104 @@ public class ReusableForUnread extends BasePage {
 
 	@FindBy(xpath = "//b[normalize-space()='My Folder']")
 	public WebElement myFolderBtn;
-	
+
 	@FindBy(xpath = "//img[contains(@id, 'plusFolder')]")
 	public WebElement subFolderBtn;
+
+// ----------------------	Compose Mail ------------------------------------------------------------------------
+
+	@FindBy(xpath = "//span[normalize-space()='Compose Mail']")
+	public WebElement composeBtn;
+
+	@FindBy(xpath = "//label[@class='xgenGmMR10']")
+	public WebElement fromTextOnTopOfCompose;
+
+	@FindBy(xpath = "//div[@id='ro-select-text0']")
+	public WebElement fromMailOnTopOfCompose;
+
+	@FindBy(xpath = "//div[@id='labelTo_0']//div//label[contains(text(),'To')]")
+	public WebElement onComposeToText;
+
+	@FindBy(xpath = "//div[@id='all-mail-to_0']/input[@class='xgenGmInputField ui-autocomplete-input']")
+	public WebElement onComposeToTextField;
+
+	@FindBy(xpath = "//div[@id='all-mail-cc_0']/input[@class='xgenGmInputField ui-autocomplete-input']")
+	public WebElement onComposeCcTextField;
+
+	@FindBy(xpath = "//div[@id='all-mail-bcc_0']/input[@class='xgenGmInputField ui-autocomplete-input']")
+	public WebElement onComposeBccTextField;
+
+	@FindBy(xpath = "//span[@id='lableCc_0']")
+	public WebElement onComposeCcBtn;
+
+	@FindBy(xpath = "//span[@id='lableBcc_0']")
+	public WebElement onComposeBccBtn;
+
+	@FindBy(xpath = "//label[normalize-space()='Cc']")
+	public WebElement onComposeCcTextAfterClick;
+
+	@FindBy(xpath = "//label[normalize-space()='Bcc']")
+	public WebElement onComposeBccTextAfterClick;
+
+	@FindBy(xpath = "//input[@id='labelSubject_0']")
+	public WebElement onComposeSubjectText;
+
+	@FindBy(xpath = "//div[@id='newComposeContainer']//p[1]")
+	public WebElement onComposeBody;
+
+	@FindBy(xpath = "//span[@id='butComposeSend0']")
+	public WebElement onComposeSendBtn;
+
+	@FindBy(xpath = "//div[@id='toast-container']//div[contains(@class,'toast-message')]")
+	public WebElement toastMsgForInvalidTo;
+
+	@FindBy(xpath = "//div[@id='ck_editor0']")
+	public WebElement onComposeFormattingBtn;
+
+	@FindBy(xpath = "//div[@aria-label='Editor toolbar']")
+	public WebElement onComposeEditorToolbar;
+
+	@FindBy(xpath = "//tbody//tr//button[3]")
+	public WebElement boldBtn;
+
+	@FindBy(xpath = "//tbody//tr//button[4]")
+	public WebElement italicBtn;
+
+	@FindBy(xpath = "//tbody//tr//button[5]")
+	public WebElement underlineBtn;
+
+	@FindBy(xpath = "//tbody//tr//button[6]")
+	public WebElement strikeBtn;
+
+	@FindBy(xpath = "//div[@class='ck ck-dropdown ck-font-size-dropdown']")
+	public WebElement fontSizeBtn;
+
+	@FindBy(xpath = "//button[@data-cke-tooltip-text='Font Background Color']")
+	public WebElement bgColorBtn;
+
+	@FindBy(xpath = "//div[@id='attachDiv_0']")
+	public WebElement fileAttachmentBtn;
+
+	@FindBy(xpath = "//input[@id='attachmentId_0']")
+	public WebElement fileAttachmentLocator;
+
+	@FindBy(xpath = "//img[contains(@src,'/temp/inline/temp')]")
+	public WebElement sentPageInlineImage;
+
+	@FindBy(xpath = "//div[@class='guided-tour-step-tooltip guided-tour-arrow-top']//span[@title='End tour']//*[name()='svg']")
+	public WebElement sentPagePopUpCrossBtn;
+
+	@FindBy(xpath = "//span[@id='newComposeClose_0']//*[name()='svg']")
+	public WebElement composeCrossBtn;
+
+	/*
+	 * @FindBy(xpath = "//input[contains(@id,'customInlineImage')]") public
+	 * WebElement inlineImageAttachmentLocator;
+	 */
+	public String inlineImageAttachmentLocator = "customInlineImage_0";
+
+	@FindBy(xpath = "//div[@id='toast-container']//div[contains(@class,'toast toast-success')]//div[contains(@class,'toast-message')]")
+	public WebElement toastMsgForSuccess;
 
 	public boolean isReUnReadInboxDisplayed() {
 		String verifyCountOfUnreadMail = UnReadInboxBtn.getText().replaceAll("[^0-9]", "").trim();
@@ -321,6 +436,25 @@ public class ReusableForUnread extends BasePage {
 		driver.switchTo().frame(fbFrame);
 
 		System.out.println(" Switched to Default → FB frames");
+	}
+
+	public void switchToMyAccountFramesIfViewMail1Re() {
+		driver.switchTo().defaultContent();
+		WebElement fbFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("FB")));
+		driver.switchTo().frame(fbFrame);
+
+		WebElement fmFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("FM")));
+		driver.switchTo().frame(fmFrame);
+
+		System.out.println(" Switched to FB → FM frames");
+
+		WebElement vcFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("VC")));
+		driver.switchTo().frame(vcFrame);
+		System.out.println(" Switched to FM → VC frames");
+
+		WebElement ifViewMailFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ifViewMail1")));
+		driver.switchTo().frame(ifViewMailFrame);
+		System.out.println(" Switched to FM → ifViewMail1 frames");
 	}
 
 	public boolean isInboxDisplayedRe() {
@@ -680,11 +814,15 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isSentBtnDisplayedRe() {
-		return isElementDisplayed(sentBtn, " Sent button is successfully visible On Inbox Page.");
+		return isElementDisplayed(sentBtn, " Sent button is successfully visible.");
 	}
 
 	public void clickSentBtnRe() {
-		safeClick(sentBtn, " Sent button is Clicked successfully from menu bar .");
+		safeClick(sentBtn, " Sent button is Clicked successfully.");
+	}
+
+	public boolean isSentSubjectBtnDisplayedRe() {
+		return isElementDisplayed(sentSubjectText, " Sent Subject text is successfully visible.");
 	}
 
 	public boolean isSentUnreadBtnDisplayedRe() {
@@ -761,21 +899,159 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isMyFolderBtnDisplayedRe() {
-		return isElementDisplayed(myFolderBtn, " My Folder button is successfully visible On Inbox Page.");
+		return isElementDisplayed(myFolderBtn, " My Folder button is successfully visible.");
 	}
 
 	public void clickMyFolderBtnRe() {
-		safeClick(myFolderBtn, "  My Folder button is Clicked successfully from menu bar .");
+		safeClick(myFolderBtn, "  My Folder button is Clicked successfully.");
 	}
-	
+
 	public boolean isSubFolderBtnDisplayedRe() {
-		return isElementDisplayed(subFolderBtn, " Sub Folder button is successfully visible On Inbox Page.");
+		return isElementDisplayed(subFolderBtn, " Sub Folder button is successfully visible.");
 	}
 
 	public void clickSubFolderBtnRe() {
-		safeClick(subFolderBtn, "  Sub Folder button is Clicked successfully from menu bar .");
+		safeClick(subFolderBtn, "  Sub Folder button is Clicked successfully.");
 	}
-	                                                                                                                                                                                        
+
+	public boolean isComposeBtnDisplayedRe() {
+		return isElementDisplayed(composeBtn, " Compose button is successfully visible.");
+	}
+
+	public void clickComposeBtnRe() {
+		safeClick(composeBtn, "  Compose button is Clicked successfully.");
+	}
+
+	public boolean isFromTextOnTopOfComposeDisplayedRe() {
+		return isElementDisplayed(fromTextOnTopOfCompose, " From Text is successfully visible On Compose page.");
+	}
+
+	public boolean isFromMailOnTopOfComposeDisplayedRe() {
+		return isElementDisplayed(fromMailOnTopOfCompose, " From Mail is successfully visible On Compose page.");
+	}
+
+	public boolean isOnComposeToTextDisplayedRe() {
+		return isElementDisplayed(onComposeToText, " To is successfully visible On Compose page.");
+	}
+
+	public boolean isOnComposeToTextFieldDisplayedRe() {
+		return isElementDisplayed(onComposeToTextField, " To Text field is successfully visible On Compose page.");
+	}
+
+	public void clickToTextFieldRe() {
+		safeClick(onComposeToTextField, "  On To Text Filed Clicked successfully.");
+	}
+
+	public boolean isOnComposeCcBtnDisplayedRe() {
+		return isElementDisplayed(onComposeCcBtn, " Cc button is successfully visible On Compose page.");
+	}
+
+	public void clickCcBtnRe() {
+		safeClick(onComposeCcBtn, "  On Cc button Clicked successfully.");
+	}
+
+	public boolean isOnComposeCcTextFieldDisplayedRe() {
+		return isElementDisplayed(onComposeCcTextField, " Cc Text field is successfully visible On Compose page.");
+	}
+
+	public void clickCcTextFieldRe() {
+		safeClick(onComposeCcTextField, "  On Cc Text Filed Clicked successfully.");
+	}
+
+	public boolean isOnComposeBccBtnDisplayedRe() {
+		return isElementDisplayed(onComposeBccBtn, " Bcc button is successfully visible On Compose page.");
+	}
+
+	public void clickBccBtnRe() {
+		safeClick(onComposeBccBtn, "  Bcc button is Clicked successfully.");
+	}
+
+	public boolean isOnComposeBccTextFieldDisplayedRe() {
+		return isElementDisplayed(onComposeBccTextField, " Bcc Text field is successfully visible On Compose page.");
+	}
+
+	public void clickBccTextFieldRe() {
+		safeClick(onComposeBccTextField, "  On Bcc Text Filed Clicked successfully.");
+	}
+
+	public boolean isOnComposeCcTextAfterClickDisplayedRe() {
+		return isElementDisplayed(onComposeCcTextAfterClick,
+				" Cc button is successfully visible On Compose page after click on Cc button.");
+	}
+
+	public boolean isOnComposeBccTextAfterClickDisplayedRe() {
+		return isElementDisplayed(onComposeBccTextAfterClick,
+				" Bcc button is successfully visible On Compose page after click on Bcc button.");
+	}
+
+	public boolean isOnComposeSubjectTextDisplayedRe() {
+		return isElementDisplayed(onComposeSubjectText,
+				" Subject Placeholder is successfully visible On Compose page.");
+	}
+
+	public void clickOnComposeSubjectTextFieldRe() {
+		safeClick(onComposeSubjectText, "  On Subject Text Filed Clicked successfully.");
+	}
+
+	public boolean isOnComposeBodyDisplayedRe() {
+		return isElementDisplayed(onComposeBody, " Body is successfully visible On Compose page.");
+	}
+
+	public void clickOnComposeBodyRe() {
+		safeClick(onComposeBody, "  On Body Text Filed Clicked successfully.");
+	}
+
+	public boolean isOnComposeSendBtnDisplayedRe() {
+		return isElementDisplayed(onComposeSendBtn, " Send button is successfully visible On Compose page.");
+	}
+
+	public void clickSendOnComposeBtnRe() {
+		safeClick(onComposeSendBtn, "  Send button is Clicked successfully.");
+	}
+
+	public boolean isOnComposeFormattingBtnDisplayedRe() {
+		return isElementDisplayed(onComposeFormattingBtn,
+				" Formatting button is successfully visible On Compose page.");
+	}
+
+	public boolean istoastMsgForSuccessDisplayedRe() {
+		return isElementDisplayed(toastMsgForSuccess, " Message sent successfully is successfully visible.");
+	}
+
+	public boolean isSentPageInlineImageDisplayedRe() {
+		return isElementDisplayed(sentPageInlineImage, " On Sent Page's mail Inline Image is successfully visible.");
+	}
+
+	public boolean isOnComposeFormattingBtnVisible() {
+		try {
+			return onComposeFormattingBtn.isDisplayed();
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public void clickOnComposeFormattingBtnRe() {
+		// WebElement formatButton = driver.findElement(By.id("ck_editor0"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", onComposeFormattingBtn);
+	}
+
+	public boolean isOnComposeAttachmentBtnDisplayedRe() {
+		return isElementDisplayed(fileAttachmentBtn, " Attachment button is successfully visible On Compose page.");
+	}
+
+	public void clickAttachmentBtnOnComposeRe() {
+		safeClick(fileAttachmentBtn, "  Attachment button is Clicked successfully.");
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", fileAttachmentBtn);
+	}
+
+	public boolean isComposeCrossBtnDisplayedRe() {
+		return isElementDisplayed(composeCrossBtn, " Cross Btn is successfully visible On Compose page.");
+	}
+
+	public void clickOnComposeCrossBtnRe() {
+		safeClick(composeCrossBtn, " Cross Btn Clicked successfully.");
+	}
+
 	public void clickReChkMainBox() throws InterruptedException {
 		safeClick(chkMainBox, "Check Main Box button is Clicked and all Check boxes are checked");
 		Thread.sleep(1500);
@@ -1003,19 +1279,16 @@ public class ReusableForUnread extends BasePage {
 			Assert.fail(" Failed to click " + elementName + ". Exception: " + e.getMessage());
 		}
 	}
-	
-	
-	
+
 	public void safeScrollAndClick(WebElement element, String elementName) {
-	    try {	        
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        js.executeScript("arguments[0].scrollIntoView(true);", element);
-	        wait.until(ExpectedConditions.elementToBeClickable(element)).click();	     
-	        System.out.println(elementName);      
-	        } 
-	       catch (Exception e) {	        
-	        Assert.fail("❌ Failed to scroll to and click " + elementName + ". Exception: " + e.getMessage());
-	    }
+		try {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].scrollIntoView(true);", element);
+			wait.until(ExpectedConditions.elementToBeClickable(element)).click();
+			System.out.println(elementName);
+		} catch (Exception e) {
+			Assert.fail("❌ Failed to scroll to and click " + elementName + ". Exception: " + e.getMessage());
+		}
 	}
 
 	public boolean areReAllEmailsSelectedViaAll() {
@@ -1023,7 +1296,8 @@ public class ReusableForUnread extends BasePage {
 		int selectedCount = 0;
 		for (WebElement checkbox : emailCheckboxesAll) {
 			String classes = checkbox.getAttribute("style");
-			if (classes.contains("background-color: rgba(196, 196, 196, 0.1); cursor: pointer;")) {
+			if (classes.contains("background-color: rgba(196, 196, 196, 0.1); cursor: pointer;")
+					|| classes.contains("background-color: rgba(196, 196, 196, 0.2); cursor: pointer;")) {
 				selectedCount++;
 			} else {
 				System.out.println(" Checkbox not visually selected: " + classes);
@@ -1506,11 +1780,13 @@ public class ReusableForUnread extends BasePage {
 
 	}
 
+	// public String movedCheckboxIdTimestamp;
+
 	public void moveToTrashRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxUnreadRe();
-
 		List<WebElement> checkboxes = listCheckBox;
-
+		String checkboxId;
 		for (int i = 0; i < checkboxes.size(); i++) {
 			int beforeCount = checkboxes.size();
 			// System.out.println("Total checkboxes found before move to trash : " +
@@ -1518,8 +1794,12 @@ public class ReusableForUnread extends BasePage {
 			WebElement checkbox1 = checkboxes.get(i);
 
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox1);
-			String checkboxId = checkbox1.getAttribute("value");
+			checkboxId = checkbox1.getAttribute("value");
 			System.out.println("Selected checkbox's Value : " + checkboxId);
+			// String timestampOfmail = mailDateAndTimeofFirst.getAttribute("title");
+			// movedCheckboxIdTimestamp = timestampOfmail;
+			// System.out.println("Selected checkbox's Timestamp : " +
+			// movedCheckboxIdTimestamp);
 			// ✅ Click to check
 			if (!checkbox1.isSelected() && i == 0) {
 
@@ -1529,10 +1809,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToTrashBtnDisplayed();
-			//	isMoveToSecureBtnDisplayed();
-			//	isMoveToSpamPromoBtnDisplayed();
-			    extractFolderNamesFromMoveTo(driver);				
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
+				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
 				int afterCount = areReAllEmailsUnselectedViaAll1();
@@ -1541,15 +1821,91 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+
+				mailCountInTrashAfterRe();
+
 				break;
 
 			}
-
 		}
+	}
+
+	public int mailCountInTrashBeforeMove;
+
+	public void mailCountInTrashBeforeRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Trash Before Move ==========");
+		switchToMyAccountFrames();
+		clickTrashBtnRe();
+		switchToUnReadInboxFrameMc();
+		List<WebElement> checkboxesInTrash = listCheckBox;
+		int Count = checkboxesInTrash.size();
+		log.info("Total Count of Mail in Trash BEFORE move: {}", Count);
+		System.out.println("Total Count of Mail In Trash Before : " + Count);
+		mailCountInTrashBeforeMove = Count;
+		log.info("Stored mail count before move: {}", mailCountInTrashBeforeMove);
+		log.info("========== COMPLETED: Mail Count in Trash (Before Move) ==========");
+		
+
+	}
+
+	public void mailCountInTrashAfterRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Trash After Move ==========");
+		switchToMyAccountFrames();
+		clickTrashBtnRe();
+		switchToUnReadInboxFrameMc();
+		List<WebElement> checkboxesInTrash = listCheckBox;
+		int afterCountInTrash = checkboxesInTrash.size();
+		log.info("Total Count of Mail in Trash AFTER move: {}", afterCountInTrash);
+		// String timestampOfmail = mailDateAndTimeofFirst.getAttribute("title");
+		// System.out.println("Selected checkbox's Value : " + timestampOfmail);
+		  log.info("Verifying mail count has increased after moving mail to Trash...");
+		Assert.assertTrue(afterCountInTrash > mailCountInTrashBeforeMove,
+				" Mail count in Trash folder should be increased after moving mail to Trash folder.");
+		log.info("Mail count validation successful.");
+		System.out.println("Total Count of Mail In Trash Before : " + mailCountInTrashBeforeMove
+				+ ", and Total Count of Mail In Trash After : " + afterCountInTrash);
+
+	}
+	
+	public int mailCountInInboxBeforeMove;
+	
+	public void mailCountInInboxBeforeRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Inbox Before Move ==========");
+		switchToMyAccountFrames();
+		clickInboxRe();
+		switchToInboxFrameIc();
+		List<WebElement> checkboxesInInbox = listCheckBox;
+		int Count = checkboxesInInbox.size();
+		log.info("Total Count of Mail in Inbox BEFORE move: {}", Count);
+		System.out.println("Total Count of Mail In Inbox Before : " + Count);
+		mailCountInInboxBeforeMove = Count;
+		log.info("Stored mail count before move: {}", mailCountInInboxBeforeMove);
+		log.info("========== COMPLETED: Mail Count in Inbox Before Move ==========");
+		
+
+	}
+
+	public void mailCountInInboxAfterRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Inbox After Move ==========");
+		switchToMyAccountFrames();
+		clickInboxRe();
+		switchToInboxFrameIc();
+		List<WebElement> checkboxesInInbox = listCheckBox;
+		int afterCountInInbox = checkboxesInInbox.size();
+		log.info("Total Count of Mail in Trash AFTER move: {}", afterCountInInbox);
+		// String timestampOfmail = mailDateAndTimeofFirst.getAttribute("title");
+		// System.out.println("Selected checkbox's Value : " + timestampOfmail);
+		  log.info("Verifying mail count has increased after moving mail to Inbox...");
+		Assert.assertTrue(afterCountInInbox > mailCountInInboxBeforeMove,
+				" Mail count in Inbox folder should be increased after moving mail to Inbox folder.");
+		log.info("Mail count validation successful.");
+		System.out.println("Total Count of Mail In Inbox Before : " + mailCountInInboxBeforeMove
+				+ ", and Total Count of Mail In Inbox After : " + afterCountInInbox);
 
 	}
 
 	public void moveToTrashInboxRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1572,9 +1928,9 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToTrashBtnDisplayed();
-			//	isMoveToSecureBtnDisplayed();
-			//	isMoveToSpamPromoBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1584,6 +1940,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1593,6 +1950,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashSentRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshSentRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1615,10 +1973,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-		//		isMoveToInboxBtnDisplayed();
-		//		isMoveToTrashBtnDisplayed();
-		//		isMoveToSecureBtnDisplayed();
-		//		isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1628,6 +1986,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1637,6 +1996,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashSentUnreadRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshSentUnreadRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1659,10 +2019,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToInboxBtnDisplayed();
-			//	isMoveToTrashBtnDisplayed();
-			//	isMoveToSecureBtnDisplayed();
-			//	isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1672,6 +2032,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1681,8 +2042,8 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashDraftRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshDraftRe();
-
 		List<WebElement> checkboxes = listCheckBox;
 
 		for (int i = 0; i < checkboxes.size(); i++) {
@@ -1712,6 +2073,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1721,8 +2083,8 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToInboxFromTrashRe() throws InterruptedException {
+		mailCountInInboxBeforeRe();
 		clickforRefreshTrashRe();
-
 		List<WebElement> checkboxes = listCheckBox;
 
 		for (int i = 0; i < checkboxes.size(); i++) {
@@ -1743,10 +2105,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToInboxBtnDisplayed();
-			//	isMoveToTrashBtnDisplayed();
-			//	isMoveToSecureBtnDisplayed();
-			//	isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToInboxBtn();
 
@@ -1756,6 +2118,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInInboxAfterRe();
 				break;
 
 			}
@@ -1765,6 +2128,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToInboxFromTrashUnreadRe() throws InterruptedException {
+		mailCountInInboxBeforeRe();
 		clickforRefreshTrashUnreadRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1787,10 +2151,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToInboxBtnDisplayed();
-			//	isMoveToTrashBtnDisplayed();
-			//	isMoveToSecureBtnDisplayed();
-			//	isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToInboxBtn();
 
@@ -1800,6 +2164,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInInboxAfterRe();
 				break;
 
 			}
@@ -1809,6 +2174,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashTemplateRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshTemplateRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1840,6 +2206,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1849,6 +2216,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToInboxFromSnoozedRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshSnoozedRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1871,10 +2239,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToInboxBtnDisplayed();
-		//		isMoveToTrashBtnDisplayed();
-		//		isMoveToSecureBtnDisplayed();
-		//		isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1884,6 +2252,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1893,6 +2262,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashSpamPromoRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1915,10 +2285,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-		//		isMoveToInboxBtnDisplayed();
-		//		isMoveToTrashBtnDisplayed();
-		//		isMoveToSecureBtnDisplayed();
-		//		isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1928,6 +2298,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1937,6 +2308,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void moveToTrashSpamPromoUnreadRe() throws InterruptedException {
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoUnreadRe();
 
 		List<WebElement> checkboxes = listCheckBox;
@@ -1959,10 +2331,10 @@ public class ReusableForUnread extends BasePage {
 				isMoveToBtnDisplayed();
 				clickMoveToBtn();
 				Thread.sleep(500);
-			//	isMoveToInboxBtnDisplayed();
-		//		isMoveToTrashBtnDisplayed();
-		//		isMoveToSecureBtnDisplayed();
-			// 	isMoveToSpamPromoBtnDisplayed();
+				// isMoveToInboxBtnDisplayed();
+				// isMoveToTrashBtnDisplayed();
+				// isMoveToSecureBtnDisplayed();
+				// isMoveToSpamPromoBtnDisplayed();
 				extractFolderNamesFromMoveTo(driver);
 				clickMoveToTrashBtn();
 
@@ -1972,6 +2344,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the 'after' count (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before move to trash : " + beforeCount
 						+ " Total checkboxes found After move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -1981,7 +2354,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxUnreadRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -1994,8 +2367,8 @@ public class ReusableForUnread extends BasePage {
 			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox1);
 			// String checkboxText = checkbox1.getAttribute("value");
 			// Step 2️⃣: Get the parent <tr> of the checkbox
-			WebElement parentRow = checkbox1.findElement(By.xpath("parentRowForBlockPage"));
-			WebElement titleElement = parentRow.findElement(By.xpath("childRowForBlockPage"));
+			WebElement parentRow = checkbox1.findElement(By.xpath(parentRowForBlockPage));
+			WebElement titleElement = parentRow.findElement(By.xpath(childRowForBlockPage));
 
 			// Step 4️⃣: Extract the title value
 			String senderTitle = titleElement.getAttribute("title");
@@ -2047,7 +2420,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnInboxRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -2113,7 +2486,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnTrashRe() throws InterruptedException {
-
+		
 		clickforRefreshTrashRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -2273,7 +2646,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnSnoozedRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSnoozedRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -2353,7 +2726,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnSpamPromoRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -2433,7 +2806,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void blockEmailCancelBtnSpamPromoUnreadRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoUnreadRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -2576,6 +2949,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the  beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Block the mail and move to trash : " + beforeCount
 						+ " And Total checkboxes found After Block the mail and move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -2647,6 +3021,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") to be less than the  beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Block the mail and move to trash : " + beforeCount
 						+ " And Total checkboxes found After Block the mail and move to trash : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -2732,7 +3107,7 @@ public class ReusableForUnread extends BasePage {
 				Assert.assertEquals(actualAlert, alertText, "Alert Text is not Matching with Actual Alert Text In");
 				alert.accept();
 				System.out.println(
-						" Selected Checkbox's owner is the owner of Opened mail id that's why we can not block this email. ");
+						" Selected Checkbox's owner is the owner of Opened mail id that's why we can not block this email. ");				
 				break;
 
 			}
@@ -2892,6 +3267,7 @@ public class ReusableForUnread extends BasePage {
 							+ ") to be less than the  beforecount (" + beforeCount + "). Assertion failed.");
 					System.out.println("Total checkboxes found before Block the mail and move to trash : " + beforeCount
 							+ " And Total checkboxes found After Block the mail and move to trash : " + afterCount);
+					mailCountInTrashAfterRe();
 					break;
 
 				}
@@ -2902,7 +3278,7 @@ public class ReusableForUnread extends BasePage {
 				Assert.assertEquals(actualAlert, alertText, "Alert Text is not Matching with Actual Alert Text In");
 				alert.accept();
 				System.out.println(
-						" Selected Checkbox's owner is the owner of Opened mail id that's why we can not block this email. ");
+						" Selected Checkbox's owner is the owner of Opened mail id that's why we can not block this email. ");				
 				break;
 
 			}
@@ -2977,6 +3353,7 @@ public class ReusableForUnread extends BasePage {
 							+ ") to be less than the  beforecount (" + beforeCount + "). Assertion failed.");
 					System.out.println("Total checkboxes found before Block the mail and move to trash : " + beforeCount
 							+ " And Total checkboxes found After Block the mail and move to trash : " + afterCount);
+					mailCountInTrashAfterRe();
 					break;
 
 				}
@@ -3062,6 +3439,7 @@ public class ReusableForUnread extends BasePage {
 							+ ") to be less than the  beforecount (" + beforeCount + "). Assertion failed.");
 					System.out.println("Total checkboxes found before Block the mail and move to trash : " + beforeCount
 							+ " And Total checkboxes found After Block the mail and move to trash : " + afterCount);
+					mailCountInTrashBeforeRe();
 					break;
 
 				}
@@ -3081,7 +3459,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxUnreadRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3108,6 +3486,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3116,7 +3495,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnInboxRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshInboxRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3143,6 +3522,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3151,7 +3531,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnSentRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSentRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3178,6 +3558,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3186,7 +3567,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnSentUnreadRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSentUnreadRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3213,6 +3594,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3221,7 +3603,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnDraftRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshDraftRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3248,6 +3630,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3256,7 +3639,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnTrashRe() throws InterruptedException {
-
+		
 		clickforRefreshTrashRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3283,6 +3666,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				
 				break;
 
 			}
@@ -3326,7 +3710,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnTemplateRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshTemplateRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3353,6 +3737,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3361,7 +3746,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnSnoozedRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSnoozedRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3388,6 +3773,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3396,7 +3782,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnSpamPromoRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3423,6 +3809,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3431,7 +3818,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public void deleteBtnSpamPromoUnreadRe() throws InterruptedException {
-
+		mailCountInTrashBeforeRe();
 		clickforRefreshSpamPromoUnreadRe();
 		List<WebElement> checkboxes = listCheckBox;
 
@@ -3458,6 +3845,7 @@ public class ReusableForUnread extends BasePage {
 						+ ") should be less than to the beforecount (" + beforeCount + "). Assertion failed.");
 				System.out.println("Total checkboxes found before Delete the mail : " + beforeCount
 						+ "  and Total checkboxes found After Delete the mail : " + afterCount);
+				mailCountInTrashAfterRe();
 				break;
 
 			}
@@ -3965,7 +4353,7 @@ public class ReusableForUnread extends BasePage {
 
 	}
 
-	public void inboxPageMenubeforCheckRe() throws InterruptedException {
+	public void checkingOnInboxPageMenuBarRe() throws InterruptedException {
 
 		isCheckMailBtnDisplayed();
 		System.out.println(" Inbox Page opened successfully. ");
@@ -3982,122 +4370,306 @@ public class ReusableForUnread extends BasePage {
 	// Assume 'driver' is your initialized WebDriver instance
 	public List<String> getDynamicFolderNames(WebDriver driver) throws InterruptedException {
 
-	    isMoreBtnDisplayedRe();
-	    clickMoreBtnRe();
-	    switchToUnReadInboxFrameMc();
-	    isMyFolderBtnDisplayedRe();
-	    clickMyFolderBtnRe();
+		isMoreBtnDisplayedRe();
+		clickMoreBtnRe();
+		switchToUnReadInboxFrameMc();
+		isMyFolderBtnDisplayedRe();
+		clickMyFolderBtnRe();
 
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    List<String> folderNames = new ArrayList<>();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		List<String> folderNames = new ArrayList<>();
 
-	 
-	    // STEP 1: Expand ALL nested folders
-	    
-	    boolean moreToExpand = true;
+		// STEP 1: Expand ALL nested folders
 
-	    while (moreToExpand) {
+		boolean moreToExpand = true;
 
-	        moreToExpand = false; // assume no more "+" icons
+		while (moreToExpand) {
 
-	        List<WebElement> plusIcons =
-	            driver.findElements(By.xpath("//img[starts-with(@id,'plusFolder')]"));
+			moreToExpand = false; // assume no more "+" icons
 
-	        for (WebElement plus : plusIcons) {
+			List<WebElement> plusIcons = driver.findElements(By.xpath("//img[starts-with(@id,'plusFolder')]"));
 
-	            try {
-	                String src = plus.getAttribute("src");
+			for (WebElement plus : plusIcons) {
 
-	                // Only click "+" icons (not "-" icons)
-	                if (src.contains("plus")) {
-	                    js.executeScript("arguments[0].scrollIntoView(true);", plus);
-	                    Thread.sleep(150);
+				try {
+					String src = plus.getAttribute("src");
 
-	                    js.executeScript("arguments[0].click();", plus);
-	                    Thread.sleep(400);  // wait for subfolders to load
+					// Only click "+" icons (not "-" icons)
+					if (src.contains("plus")) {
+						js.executeScript("arguments[0].scrollIntoView(true);", plus);
+						Thread.sleep(150);
 
-	                    moreToExpand = true; // new folders loaded → check again
-	                }
+						js.executeScript("arguments[0].click();", plus);
+						Thread.sleep(400); // wait for subfolders to load
 
-	            } catch (Exception ignored) {}
-	        }
-	    }
+						moreToExpand = true; // new folders loaded → check again
+					}
 
-	
-	    // STEP 2: Extract folder names
-	
-	    List<WebElement> folderElements =
-	        driver.findElements(By.xpath("//td[contains(@id,'FolderCol')]//b"));
+				} catch (Exception ignored) {
+				}
+			}
+		}
 
-	    for (WebElement el : folderElements) {
-	        try {
-	            String name = el.getText().trim();
-	            if (!name.isEmpty() && !folderNames.contains(name)) {
-	                folderNames.add(name);
-	                System.out.println("Extracted Folder Name: " + name);
-	            }
-	        } catch (Exception ignore) {}
-	    }
+		// STEP 2: Extract folder names
 
-	    return folderNames;
+		List<WebElement> folderElements = driver.findElements(By.xpath("//td[contains(@id,'FolderCol')]//b"));
+
+		for (WebElement el : folderElements) {
+			try {
+				String name = el.getText().trim();
+				if (!name.isEmpty() && !folderNames.contains(name)) {
+					folderNames.add(name);
+					System.out.println("Extracted Folder Name: " + name);
+				}
+			} catch (Exception ignore) {
+			}
+		}
+
+		return folderNames;
 	}
-	
+
 	public void printFolderNames() throws InterruptedException {
 
-        List<String> folderList = getDynamicFolderNames(driver);
+		List<String> folderList = getDynamicFolderNames(driver);
 
-        System.out.println("Folder names inside More's My Folder : " + folderList);
-    }
+		System.out.println("Folder names inside More's My Folder : " + folderList);
+	}
 
 	public List<String> extractFolderNamesFromMoveTo(WebDriver driver) throws InterruptedException {
-	    List<String> folderNames = new ArrayList<>();
-	    WebElement container = driver.findElement(By.id("mCSB_1_container"));
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	    int previousSize = -1;
-	    int stableCount = 0;
-	    int maxStable = 3;
+		List<String> folderNames = new ArrayList<>();
 
-	    while (true) {
-	        List<WebElement> items = container.findElements(By.xpath(".//li"));
+		WebElement container = driver.findElement(By.id("mCSB_1_container"));
+		WebElement scrollable = driver.findElement(By.id("mCSB_1")); // <- Correct scrollable div
 
-	        for (WebElement li : items) {
-	            String name = li.getText().trim();
-	            if (!name.isEmpty() && !folderNames.contains(name)) {
-	                folderNames.add(name);
-	                System.out.println( name + " button is visible after click on Move to Button.");
-	            }
-	        }
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-	        if (folderNames.size() == previousSize) {
-	            stableCount++;
-	        } else {
-	            stableCount = 0;
-	        }
-	        previousSize = folderNames.size();
+		long lastScrollTop = -1;
+		long currentScrollTop = 0;
 
-	        if (stableCount >= maxStable) break;
+		while (lastScrollTop != currentScrollTop) {
 
-	        // if there is at least one li, scroll the last one into view
-	        if (!items.isEmpty()) {
-	            WebElement last = items.get(items.size() - 1);
-	            js.executeScript("arguments[0].scrollIntoView(true);", last);
-	        } else {
-	            // nothing to scroll, break to avoid infinite loop
-	            break;
-	        }
+			lastScrollTop = (long) js.executeScript("return arguments[0].scrollTop;", scrollable);
 
-	        Thread.sleep(800);
-	    }
+			List<WebElement> items = container.findElements(By.xpath(".//li"));
 
-	    return folderNames;
+			for (WebElement li : items) {
+				String name = li.getText().trim();
+				if (!name.isEmpty() && !folderNames.contains(name)) {
+					folderNames.add(name);
+					System.out.println("Found folder: " + name);
+				}
+			}
+
+			// SCROLL DOWN by fixed amount
+			js.executeScript("arguments[0].scrollTop = arguments[0].scrollTop + 300;", scrollable);
+
+			Thread.sleep(300);
+
+			currentScrollTop = (long) js.executeScript("return arguments[0].scrollTop;", scrollable);
+		}
+
+		return folderNames;
 	}
 
 	public void printFolderNamesFromMoveTo() throws InterruptedException {
 
-        List<String> folderList = extractFolderNamesFromMoveTo(driver);
+		List<String> folderList = extractFolderNamesFromMoveTo(driver);
 
-        System.out.println("Folder names inside Move To : " + folderList);
-    }
+		System.out.println("Folder names inside Move To : " + folderList);
+	}
+
+	public void fromMailCheckOnTopofComposePageRe() throws InterruptedException {
+
+		String mailTopOfComposePage = fromMailOnTopOfCompose.getAttribute("title").trim();
+
+		Assert.assertTrue(mailTopOfComposePage.contains(userName) || mailTopOfComposePage.contains(userName1),
+				" Mail on top of compose page is not matching with logged in user mail. ");
+		System.out.println(" Mail on top of compose page is matching with logged in user mail.");
+	}
+
+	// ===== CKEDITOR — FORMAT BUTTON LOCATORS =====
+
+	public void clickToolbar(WebElement toolbarBtn) {
+
+		clickOnComposeFormattingBtnRe();
+		if (!onComposeEditorToolbar.isDisplayed()) {
+			clickOnComposeFormattingBtnRe();
+			System.out.println(" Compose Formatting Toolbar is visible. ");
+		}
+		WebElement button = toolbarBtn;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.elementToBeClickable(button));
+		Actions actions = new Actions(driver);
+		actions.moveToElement(button).click().perform();
+		// ((JavascriptExecutor)
+		// driver).executeScript("arguments[0].scrollIntoView(true);", button);
+		// button.click();
+
+	}
+
+	// ========== MAIN REUSABLE METHODS for Bold / Italic / Underline / Strike
+	// through ==========
+
+	public void typeBold(String text) {
+		clickToolbar(boldBtn);
+		onComposeBody.sendKeys(text);
+		clickToolbar(boldBtn);
+
+	}
+
+	public void typeItalic(String text) {
+		clickToolbar(italicBtn);
+		onComposeBody.sendKeys(text);
+		clickToolbar(italicBtn);
+
+	}
+
+	public void typeUnderline(String text) {
+		clickToolbar(underlineBtn);
+		onComposeBody.sendKeys(text);
+		clickToolbar(underlineBtn);
+
+	}
+
+	public void typeStrikethrough(String text) {
+		clickToolbar(strikeBtn);
+		onComposeBody.sendKeys(text);
+		clickToolbar(strikeBtn);
+
+	}
+
+	public void typeNormalText(String text) {
+		onComposeBody.sendKeys(text);
+
+	}
+
+	public void selectFontSize(String size) {
+		try {
+			// Open Font Size dropdown
+			clickToolbar(fontSizeBtn);
+
+			// Select the size dynamically
+			WebElement sizeOption = driver.findElement(By.xpath("//span[normalize-space(text())='" + size + "']"));
+
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", sizeOption);
+			sizeOption.click();
+
+			System.out.println("Font size selected: " + size);
+
+		} catch (Exception e) {
+			System.out.println("❌ Failed to select font size: " + size);
+			e.printStackTrace();
+		}
+	}
+
+	public void typeFontSizedText(String size, String text) {
+		selectFontSize(size);
+		onComposeBody.sendKeys(text);
+	}
+
+	// ========== FILE ATTACHMENT METHODS ==========
+
+	public void attachFile(String filePath) {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+			// 1. Ensure file input is present
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("attachmentId_0")));
+
+			// 2. Unhide if hidden
+			if (!fileAttachmentLocator.isDisplayed()) {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].style.display='block';", fileAttachmentLocator);
+			}
+
+			// 3. Upload file
+			fileAttachmentLocator.sendKeys(filePath);
+
+			System.out.println("File attached successfully: " + filePath);
+
+		} catch (Exception e) {
+			System.out.println("Failed to attach file: " + filePath);
+			String message = "Failed to attach file due to unexpected error. File: " + filePath;
+			Assert.fail(message, e);
+		}
+	}
+
+	// ========== Inline Image ATTACHMENT METHODS ==========
+
+	public void attachInlineImage(String filePath) {
+
+		// Locators used for assertions
+		By fileInputLocator = By.id("customInlineImage_0");
+		// Corrected XPath example for image preview (using @src)
+		By imagePreviewLocator = By.xpath("//img[contains(@src,'/temp/inline/temp')]");
+		By uploadFailedLocator = By.xpath("//*[contains(text(),'Upload failed')]");
+
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+		try {
+
+			WebElement fileInput = wait.until(ExpectedConditions.elementToBeClickable(fileInputLocator));
+			if (!fileAttachmentLocator.isDisplayed()) {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].style.display='block';", fileInput);
+			}
+			Thread.sleep(5000);
+			fileInput.sendKeys(filePath);
+			wait.until(ExpectedConditions.presenceOfElementLocated(imagePreviewLocator));
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(uploadFailedLocator));
+			Assert.assertTrue(true, "Inline image upload completed successfully.");
+			System.out.println("Inline Image attached successfully : " + filePath);
+
+		} catch (Exception e) {
+			System.out.println("Failed to attach Inline Image: " + filePath);
+			String message = "Inline Image upload failed due to unexpected error.";
+			Assert.fail(message, e);
+		}
+	}
+
+	public void verifyMailInSentBoxRe(String mailSubjectText, String nameOfInlineImage) {
+
+		clickSentBtnRe();
+		switchToUnReadInboxFrameMc();
+		String sentMailSubject = sentSubjectText.getText().trim();
+		Assert.assertEquals(sentMailSubject, mailSubjectText,
+				" Sent mail subject is not matching with composed mail subject. ");
+		System.out.println(" Sent mail subject is matching with composed mail subject. ");
+		sentSubjectText.click();
+		switchToMyAccountFramesIfViewMail1Re();
+		sentPagePopUpCrossBtn.click();
+		isSentPageInlineImageDisplayedRe();
+		String sentPageInline = sentPageInlineImage.getAttribute("src").trim();
+		Assert.assertTrue(sentPageInline.contains(nameOfInlineImage),
+				" Sent mail is not contain the same Inline Image which is Sent via Compose. ");
+
+		System.out.println(" Sent mail is contain the same Inline Image which is Sent via Compose. ");
+
+	}
+
+	public String generateSubject(String prefix) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+		return prefix + "_" + dtf.format(LocalDateTime.now());
+	}
+
+	public void verifyMailInDraftBoxRe(String mailSubjectText, String nameOfInlineImage) {
+
+		clickDraftBtnRe();
+		switchToUnReadInboxFrameMc();
+		String sentMailSubject = sentSubjectText.getText().trim();
+		Assert.assertEquals(sentMailSubject, mailSubjectText,
+				" Sent mail subject is not matching with composed mail subject. ");
+		System.out.println(" Sent mail subject is matching with composed mail subject. ");
+		sentSubjectText.click();
+		switchToMyAccountFrames();
+		isSentPageInlineImageDisplayedRe();
+		String sentPageInline = sentPageInlineImage.getAttribute("src").trim();
+		Assert.assertTrue(sentPageInline.contains(nameOfInlineImage),
+				" Draft mail is not contain the same Inline Image which is Saved via Compose. ");
+
+		System.out.println(" Draft mail is contain the same Inline Image which is Saved via Compose. ");
+
+	}
 
 }

@@ -148,7 +148,7 @@ public ReusableForUnread ruse;
 			
 		 }	
 		 
-		 public void moveToTrashForTrash() throws InterruptedException
+		 public void moveToInboxFromTrash() throws InterruptedException
 		    {
 		        ruse.moveToInboxFromTrashRe();
 		    }

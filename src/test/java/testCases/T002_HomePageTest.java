@@ -5,20 +5,20 @@ import org.testng.annotations.Test;
 import pageObjects.MyAccountPage;
 import testBase.BaseClass;
 
-public class HomePageTest extends BaseClass {
+public class T002_HomePageTest extends BaseClass {
 
 	// @Test(dataProvider="LoginData",
 	// dataProviderClass=DataProviders.class,groups="Datadriven")// getting data
 	// provider from different class
 	@Test(priority = 1)
 	public void verify_HomePage() throws InterruptedException, IOException {
-		// logger.info("***** stating TC_003_LoginDDT ******");
+		
 
 		// Calling Instance of MyAccountPage from public MyAccountPage doLogin()
 		MyAccountPage macc = doLogin();
 
 		// Check on UnreadInbox button
-		 macc.verifyUnreadInboxPage();
+		// macc.verifyUnreadInboxPage();
 
 		// Check Inbox icon
 		// macc.verifyInboxPage();
@@ -27,7 +27,7 @@ public class HomePageTest extends BaseClass {
 		// macc.verifySentPage();
 		
 		// Check Sent Unread icon
-		//   macc.verifySentUnreadPage();
+	//	   macc.verifySentUnreadPage();
 
 		// Check Draft icon
 		// macc.verifyDraftPage();
@@ -36,7 +36,7 @@ public class HomePageTest extends BaseClass {
 		// macc.verifyTrashPage();
 
 		// Check Trash Unread icon
-		// macc.verifyTrashUnreadPage();
+	//	 macc.verifyTrashUnreadPage();
 
 		// Check Template icon
 		// macc.verifyTemplatePage();
@@ -48,7 +48,7 @@ public class HomePageTest extends BaseClass {
 		// macc.verifySpamPromoPage();
 
 		// Check Spam-Promo Unread icon
-		// macc.verifySpamPromoUnreadPage();		   
+		 macc.verifySpamPromoUnreadPage();		   
 		   
 
 		// Click User icon

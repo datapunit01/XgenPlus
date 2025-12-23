@@ -4,7 +4,7 @@
      <test name="ChromeTest">
 		<parameter name="browser" value="chrome" />
         <classes>
-			<class name="testCases.HomePageTest" />
+			<class name="testCases.T003_ComposeMailTest" />
         </classes>
     </test>
    

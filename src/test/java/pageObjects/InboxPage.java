@@ -33,8 +33,8 @@ public class InboxPage extends BasePage {
 
 	}
 
-	public void inboxPageMenubeforCheckForInbox() throws InterruptedException {
-		ruse.inboxPageMenubeforCheckRe();
+	public void checkingMenuBarOnInboxPage() throws InterruptedException {
+		ruse.checkingOnInboxPageMenuBarRe();
 
 	}
 

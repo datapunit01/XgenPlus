@@ -125,7 +125,7 @@ public class TrashUnreadPage extends BasePage {
 
 	}
 
-	public void moveToTrashForTrashUnread() throws InterruptedException {
+	public void moveToInboxFromTrashUnread() throws InterruptedException {
 		ruse.moveToInboxFromTrashUnreadRe();
 	}
 

@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import testBase.BaseClass;
 
-public class LoginTest extends BaseClass
+public class T001_LoginTest extends BaseClass
 {
 			
 	//@Test(dataProvider="LoginData", dataProviderClass=DataProviders.class,groups="Datadriven")// getting data provider from different class
