@@ -86,7 +86,7 @@ public class BaseClass {
 		    break;
 
 		default:
-		    throw new IllegalArgumentException("❌ Invalid browser: " + br);
+		    throw new IllegalArgumentException("Invalid browser: " + br);
 		}
 
 

@@ -112,7 +112,7 @@ public class MyAccountPage extends BasePage {
 
 	public void verifyUnreadInboxPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Unread Inbox Page Verification ==========");
+		log.info(" STARTING: Unread Inbox Page Verification ");
 
 		log.info("Checking if Unread Inbox button is visible...");
 		if (unread.isUnReadInboxDisplayedForUnReadInbox()) {
@@ -201,12 +201,12 @@ public class MyAccountPage extends BasePage {
 			Assert.assertTrue(count <= 5, "Total emails in Unread Inbox are less than 5.");
 		}
 
-		log.info("========== COMPLETED: Inbox Unread Page Verification ==========");
+		log.info(" COMPLETED: Inbox Unread Page Verification ");
 	}
 
 	public void verifyInboxPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Inbox Page Verification ==========");
+		log.info(" STARTING: Inbox Page Verification ");
 
 		log.info("Checking if Inbox button is visible...");
 		inpage.isInboxBtnDisplayed();
@@ -297,12 +297,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails In Inbox Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Inbox Page Verification ==========");
+		log.info(" COMPLETED: Inbox Page Verification ");
 	}
 
 	public void verifySentPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Sent Page Verification ==========");
+		log.info(" STARTING: Sent Page Verification ");
 
 		log.info("Checking if Sent button is visible...");
 		stPage.isSentBtnDisplayed();
@@ -384,12 +384,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Sent Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Sent Page Verification ==========");
+		log.info(" COMPLETED: Sent Page Verification ");
 	}
 
 	public void verifySentUnreadPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Sent Unread Page Verification ==========");
+		log.info(" STARTING: Sent Unread Page Verification ");
 
 		log.info("Checking if Sent Unread button is visible...");
 		stuPage.isSentUnreadBtnDisplayed();
@@ -471,12 +471,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Sent Unread Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Sent Unread Page Verification ==========");
+		log.info(" COMPLETED: Sent Unread Page Verification ");
 	}
 
 	public void verifyTrashPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Trash Page Verification ==========");
+		log.info(" STARTING: Trash Page Verification ");
 
 		log.info("Checking if Trash button is visible...");
 		thPage.isTrashBtnDisplayed();
@@ -561,12 +561,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Trash Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Trash Page Verification ==========");
+		log.info(" COMPLETED: Trash Page Verification ");
 	}
 
 	public void verifyTrashUnreadPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Trash Unread Page Verification ==========");
+		log.info(" STARTING: Trash Unread Page Verification ");
 
 		log.info("Checking if Trash Unread button is visible...");
 		tuPage.isTrashUnreadBtnDisplayed();
@@ -651,7 +651,7 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Trash Unread Page are less than 5 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Trash Unread Page Verification ==========");
+		log.info(" COMPLETED: Trash Unread Page Verification");
 	}
 
 	public void verifyTemplatePage() throws IOException, InterruptedException {
@@ -717,12 +717,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Template Page are less than 2 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Template Page Verification ==========");
+		log.info(" COMPLETED: Template Page Verification ");
 	}
 
 	public void verifySnoozedPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Snoozed Page Verification ==========");
+		log.info(" STARTING: Snoozed Page Verification ");
 
 		log.info("Checking if Snoozed button is visible...");
 		sdPage.isSnoozedBtnDisplayedForSnoozedRe();
@@ -800,12 +800,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Snoozed Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Snoozed Page Verification ==========");
+		log.info(" COMPLETED: Snoozed Page Verification ");
 	}
 
 	public void verifySpamPromoPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Spam-Promo Page Verification ==========");
+		log.info(" STARTING: Spam-Promo Page Verification ");
 
 		log.info("Checking if Spam-Promo button is visible...");
 		spPage.isSpamPromoBtnDisplayed();
@@ -890,12 +890,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Spam-Promo Page are less than 4 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Spam-Promo Page Verification ==========");
+		log.info("COMPLETED: Spam-Promo Page Verification ");
 	}
 
 	public void verifySpamPromoUnreadPage() throws IOException, InterruptedException {
 
-		log.info("========== STARTING: Spam-Promo Unread Page Verification ==========");
+		log.info("STARTING: Spam-Promo Unread Page Verification ");
 
 		log.info("Checking if Spam-Promo Unread button is visible...");
 		spuPage.isSpamPromoUnreadBtnDisplayed();
@@ -981,12 +981,12 @@ public class MyAccountPage extends BasePage {
 					"Total Number of Emails in Spam-Promo Unread Page are less than 5 so test cannot continue.");
 		}
 
-		log.info("========== COMPLETED: Spam-Promo Unread Page Verification ==========");
+		log.info(" COMPLETED: Spam-Promo Unread Page Verification ");
 	}
 
 	public void verifyComposeAndSendMail() throws InterruptedException, IOException {
 
-		log.info("========== STARTING: Compose and Send Mail Verification ==========");
+		log.info(" STARTING: Compose and Send Mail Verification ");
 
 		log.info("Checking if Compose button is visible...");
 		cpPage.isComposeBtnDisplayed();
@@ -1051,12 +1051,12 @@ public class MyAccountPage extends BasePage {
 		cpPage.verifyMailFromSentBox(subject, nameOfInlineImage);
 		log.info("Mail verification in Sent folder successful.");
 
-		log.info("========== COMPLETED: Compose and Send Mail Verification ==========");
+		log.info(" COMPLETED: Compose and Send Mail Verification ");
 	}
 
 	public void verifyComposeWithDraftPage() throws InterruptedException, IOException {
 
-		log.info("========== STARTING: Compose Mail with Draft Verification ==========");
+		log.info("STARTING: Compose Mail with Draft Verification");
 
 		log.info("Checking if Compose button is visible...");
 		cpdPage.isComposeBtnDisplayed();
@@ -1126,7 +1126,7 @@ public class MyAccountPage extends BasePage {
 		cpPage.verifyMailFromSentBox(subject, nameOfInlineImage);
 		log.info("Mail successfully sent from Draft and verified in Sent folder.");
 
-		log.info("========== COMPLETED: Compose Mail with Draft Verification ==========");
+		log.info(" COMPLETED: Compose Mail with Draft Verification ");
 	}
 
 	/** ✅ User icon */
@@ -1162,9 +1162,9 @@ public class MyAccountPage extends BasePage {
 	public void safeClick(WebElement element, String elementName) {
 		try {
 			wait.until(ExpectedConditions.elementToBeClickable(element)).click();
-			System.out.println("✅ Clicked: " + elementName);
+			System.out.println("Clicked: " + elementName);
 		} catch (Exception e) {
-			Assert.fail("❌ Failed to click " + elementName + ". Exception: " + e.getMessage());
+			Assert.fail(" Failed to click " + elementName + ". Exception: " + e.getMessage());
 		}
 	}
 

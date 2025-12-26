@@ -1,37 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/maven-v4_0_0.xsd">
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xgenplus</groupId>
     <artifactId>XgenPlus</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-	
+    <!-- ✅ GLOBAL PROPERTIES -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 
+    <!-- ✅ DEPENDENCIES -->
     <dependencies>
-		<!-- Selenium -->
-       <dependency>
+
+        <!-- Selenium -->
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.22.0</version>
         </dependency>
-        
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.23.1</version> <!-- use the latest stable -->
-        </dependency>
 
-        <dependency>
-              <groupId>org.apache.logging.log4j</groupId>
-              <artifactId>log4j-api</artifactId>
-                <version>2.23.1</version>
-        </dependency>
-
-
-		<!-- TestNG -->
+        <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -39,87 +35,84 @@
             <scope>test</scope>
         </dependency>
 
-		<!-- WebDriver Manager (to auto download drivers) -->
+        <!-- WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.9.2</version>
         </dependency>
 
-		<!-- Apache POI (For Dynamic Excel Data) -->
+        <!-- Log4j2 ONLY (single logger implementation) -->
         <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.2.5</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.23.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.23.1</version>
         </dependency>
 
-		<!-- (Optional) Logging support -->
+        <!-- Mail -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.13</version>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
         </dependency>
         
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-             <version>1.4.14</version>
-        </dependency>
-        
-        <dependency>
-           <groupId>com.sun.mail</groupId>
-           <artifactId>jakarta.mail</artifactId>
-           <version>2.0.1</version>
-       </dependency>
+        <!-- Apache POI -->
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>5.2.5</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.2.5</version>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml-lite</artifactId>
+    <version>5.2.5</version>
+</dependency>
 
 
-        <dependency>
-           <groupId>org.slf4j</groupId>
-           <artifactId>slf4j-log4j12</artifactId>
-           <version>2.0.9</version>
-        </dependency>
-        
-        <dependency>
-          <groupId>org.seleniumhq.selenium</groupId>
-          <artifactId>selenium-devtools-v85</artifactId>
-          <version>4.25.0</version>
-       </dependency>       
-    
-       <dependency>
-           <groupId>org.apache.logging.log4j</groupId>
-           <artifactId>log4j-slf4j2-impl</artifactId>
-           <version>2.20.0</version>
-       </dependency>
-                    
-        
     </dependencies>
-    
+
+	<!-- ✅ BUILD (NOT pluginManagement) -->
     <build>
-	 <pluginManagement>
-		 
-		 <plugins>
-			<plugin>
-	          <groupId>org.apache.maven.plugins</groupId>
-	          <artifactId>maven-compiler-plugin</artifactId>
-	          <version>3.11.0</version>
-	      </plugin>
-	        
-	         <plugin>
-		          <groupId>org.apache.maven.plugins</groupId>
-		          <artifactId>maven-surefire-plugin</artifactId>
-		          <version>3.2.2</version>
-		          <configuration>
-					  <suiteXmlFiles>
-						  <suiteXmlFile>testngLoginTest.xml</suiteXmlFile>
-					  </suiteXmlFiles>
-				  </configuration>
-       		 </plugin>
-			 
-		 </plugins>
-		 
-	 </pluginManagement>
-	 
-	 
- </build>
-    
+        <plugins>
+
+			<!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>11</source>
+                    <target>11</target>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                </configuration>
+            </plugin>
+
+			<!-- TestNG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testngLoginTest.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>
