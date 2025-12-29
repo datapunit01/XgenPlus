@@ -850,7 +850,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isTrashUnreadBtnDisplayedRe() {
-		return isElementDisplayed(trashUnreadBtn, " Trash Unread button is successfully visible On Inbox Page.");
+		return isElementDisplayed(trashUnreadBtn, " Trash Unread button is successfully visible.");
 	}
 
 	public void clickTrashUnreadBtnRe() {
@@ -858,7 +858,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isTemplateBtnDisplayedRe() {
-		return isElementDisplayed(templateBtn, " Template button is successfully visible On Inbox Page.");
+		return isElementDisplayed(templateBtn, " Template button is successfully visible.");
 	}
 
 	public void clickTemplateBtnRe() {
@@ -866,7 +866,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isSnoozedBtnDisplayedRe() {
-		return isElementDisplayed(snoozedBtn, " Snoozed button is successfully visible On Inbox Page.");
+		return isElementDisplayed(snoozedBtn, " Snoozed button is successfully visible.");
 	}
 
 	public void clickSnoozedBtnRe() {
@@ -874,7 +874,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isSpamPromoBtnDisplayedRe() {
-		return isElementDisplayed(spamPromoBtn, " Spam-Promo button is successfully visible On Inbox Page.");
+		return isElementDisplayed(spamPromoBtn, " Spam-Promo button is successfully visible.");
 	}
 
 	public void clickSpamPromoBtnRe() {
@@ -883,11 +883,11 @@ public class ReusableForUnread extends BasePage {
 
 	public boolean isSpamPromoUnreadBtnDisplayedRe() {
 		return isElementDisplayed(spamPromoUnreadBtn,
-				" Spam Promo Unread Inbox button is successfully visible On Inbox Page.");
+				" Spam Promo Unread  button is successfully visible.");
 	}
 
 	public void clickSpamPromoUnreadBtnRe() {
-		safeClick(spamPromoUnreadBtn, "  Spam Promo Unread Inbox button is Clicked successfully from menu bar .");
+		safeClick(spamPromoUnreadBtn, "  Spam Promo Unread button is Clicked successfully from menu bar .");
 	}
 
 	public boolean isMoreBtnDisplayedRe() {
