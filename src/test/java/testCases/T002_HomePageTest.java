@@ -27,7 +27,7 @@ public class T002_HomePageTest extends BaseClass {
 		// macc.verifySentPage();
 		
 		// Check Sent Unread icon
-		   macc.verifySentUnreadPage();
+		//   macc.verifySentUnreadPage();
 
 		// Check Draft icon
 		// macc.verifyDraftPage();
@@ -48,7 +48,7 @@ public class T002_HomePageTest extends BaseClass {
 		// macc.verifySpamPromoPage();
 
 		// Check Spam-Promo Unread icon
-		// macc.verifySpamPromoUnreadPage();		   
+		 macc.verifySpamPromoUnreadPage();		   
 		   
 
 		// Click User icon
