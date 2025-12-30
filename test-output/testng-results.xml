@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-12-29T12:16:36 IST" name="CrossBrowserSuite" finished-at="2025-12-29T12:18:01 IST" duration-ms="85191">
+  <suite started-at="2025-12-30T15:25:29 IST" name="CrossBrowserSuite" finished-at="2025-12-30T15:45:36 IST" duration-ms="1207263">
     <groups>
     </groups>
-    <test started-at="2025-12-29T12:16:36 IST" name="ChromeTest" finished-at="2025-12-29T12:18:01 IST" duration-ms="85191">
+    <test started-at="2025-12-30T15:25:29 IST" name="ChromeTest" finished-at="2025-12-30T15:45:36 IST" duration-ms="1207263">
       <class name="testCases.T002_HomePageTest">
-        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-29T12:16:36 IST" name="setup" finished-at="2025-12-29T12:16:41 IST" duration-ms="5506" status="PASS">
+        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-30T15:25:29 IST" name="setup" finished-at="2025-12-30T15:25:36 IST" duration-ms="6839" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -18,64 +18,19 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method is-config="true" signature="switchToLoginFrame()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-29T12:16:41 IST" name="switchToLoginFrame" finished-at="2025-12-29T12:16:41 IST" duration-ms="62" status="PASS">
+        <test-method is-config="true" signature="switchToLoginFrame()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-30T15:25:36 IST" name="switchToLoginFrame" finished-at="2025-12-30T15:25:36 IST" duration-ms="93" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- switchToLoginFrame -->
-        <test-method signature="verify_HomePage()[pri:1, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-29T12:16:41 IST" name="verify_HomePage" finished-at="2025-12-29T12:17:59 IST" duration-ms="77419" status="FAIL">
-          <exception class="java.lang.AssertionError">
-            <message>
-              <![CDATA[ Spam Promo Unread button is successfully visible. not visible/clickable. Exception: Expected condition failed: waiting for element to be clickable: [[ChromeDriver: chrome on windows (e28cdfce67c24f844ca87214ee65dbb5)] -> xpath: //span[starts-with(@id, 'SpnNew-23-')]] (tried for 20 second(s) with 500 milliseconds interval)
-Build info: version: '4.22.0', revision: 'c5f3146703*'
-System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.8'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 143.0.7499.147, chrome: {chromedriverVersion: 143.0.7499.169 (164b20aab62..., userDataDir: C:\Users\DATA\AppData\Local...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:55898}, goog:processID: 17256, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:55898/devtoo..., se:cdpVersion: 143.0.7499.147, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: e28cdfce67c24f844ca87214ee65dbb5]]>
-            </message>
-            <full-stacktrace>
-              <![CDATA[java.lang.AssertionError:  Spam Promo Unread button is successfully visible. not visible/clickable. Exception: Expected condition failed: waiting for element to be clickable: [[ChromeDriver: chrome on windows (e28cdfce67c24f844ca87214ee65dbb5)] -> xpath: //span[starts-with(@id, 'SpnNew-23-')]] (tried for 20 second(s) with 500 milliseconds interval)
-Build info: version: '4.22.0', revision: 'c5f3146703*'
-System info: os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.8'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 143.0.7499.147, chrome: {chromedriverVersion: 143.0.7499.169 (164b20aab62..., userDataDir: C:\Users\DATA\AppData\Local...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:55898}, goog:processID: 17256, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:55898/devtoo..., se:cdpVersion: 143.0.7499.147, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: e28cdfce67c24f844ca87214ee65dbb5
-at org.testng.Assert.fail(Assert.java:111)
-at utilities.ReusableForUnread.isElementDisplayed(ReusableForUnread.java:1251)
-at utilities.ReusableForUnread.isSpamPromoUnreadBtnDisplayedRe(ReusableForUnread.java:885)
-at pageObjects.SpamPromoUnreadPage.isSpamPromoUnreadBtnDisplayed(SpamPromoUnreadPage.java:34)
-at pageObjects.MyAccountPage.verifySpamPromoUnreadPage(MyAccountPage.java:901)
-at testCases.T002_HomePageTest.verify_HomePage(T002_HomePageTest.java:51)
-at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
-at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
-at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
-at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
-at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
-at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-at org.testng.TestRunner.privateRun(TestRunner.java:739)
-at org.testng.TestRunner.run(TestRunner.java:614)
-at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-at org.testng.SuiteRunner$SuiteWorker.run(SuiteRunner.java:463)
-at org.testng.internal.thread.ThreadUtil.lambda$execute$0(ThreadUtil.java:64)
-at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
-at java.base/java.lang.Thread.run(Thread.java:1583)
-]]>
-            </full-stacktrace>
-          </exception> <!-- java.lang.AssertionError -->
+        <test-method signature="verify_HomePage()[pri:1, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-30T15:25:36 IST" name="verify_HomePage" finished-at="2025-12-30T15:45:35 IST" duration-ms="1198908" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- verify_HomePage -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-29T12:17:59 IST" name="tearDown" finished-at="2025-12-29T12:18:01 IST" duration-ms="2068" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-30T15:45:35 IST" name="tearDown" finished-at="2025-12-30T15:45:36 IST" duration-ms="1120" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="sendLogsAfterSuite()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-29T12:18:01 IST" name="sendLogsAfterSuite" finished-at="2025-12-29T12:18:06 IST" duration-ms="4890" status="PASS">
+        <test-method is-config="true" signature="sendLogsAfterSuite()[pri:0, instance:testCases.T002_HomePageTest@3de8f619]" started-at="2025-12-30T15:45:36 IST" name="sendLogsAfterSuite" finished-at="2025-12-30T15:45:41 IST" duration-ms="4739" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- sendLogsAfterSuite -->

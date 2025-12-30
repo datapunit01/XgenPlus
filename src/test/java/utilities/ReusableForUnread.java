@@ -48,7 +48,7 @@ public class ReusableForUnread extends BasePage {
 	@FindBy(xpath = "//label[@for='chkMain']")
 	public WebElement chkMainBox;
 
-	@FindBy(xpath = "//label[normalize-space()='Quick View']")
+	@FindBy(xpath = "//input[@id='quickViewChk']")
 	public WebElement quickViewBox;
 
 	@FindBy(xpath = "//*[name()='path' and contains(@d,'M0.0396528')]")
@@ -546,7 +546,7 @@ public class ReusableForUnread extends BasePage {
 	}
 
 	public boolean isReQuickViewBoxDisplayed() {
-		return isElementDisplayed(quickViewBox, " Quick View checkBox is Visible. ");
+		return isElementDisplayed(quickViewBox, " Quick View checkBox. ");
 	}
 
 	public void clickReQuickViewBox() {
@@ -1252,6 +1252,8 @@ public class ReusableForUnread extends BasePage {
 			return false;
 		}
 	}
+	
+	
 
 	public boolean isElementNotDisplayed(WebElement element, String elementName) {
 		try {
