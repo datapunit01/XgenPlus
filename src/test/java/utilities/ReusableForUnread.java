@@ -48,7 +48,7 @@ public class ReusableForUnread extends BasePage {
 	@FindBy(xpath = "//label[@for='chkMain']")
 	public WebElement chkMainBox;
 
-	@FindBy(xpath = "//input[@id='quickViewChk']")
+	@FindBy(xpath = "//label[normalize-space()='Quick View']")
 	public WebElement quickViewBox;
 
 	@FindBy(xpath = "//*[name()='path' and contains(@d,'M0.0396528')]")
