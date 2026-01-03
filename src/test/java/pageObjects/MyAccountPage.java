@@ -25,6 +25,7 @@ public class MyAccountPage extends BasePage {
 	SpamPromoPage spPage;
 	SpamPromoUnreadPage spuPage;
 	SnoozedPage sdPage;
+	SnoozedMailFromInbox smfiPage;
 	ComposePage cpPage;
 	ComposeWithDraftPage cpdPage;
 
@@ -65,6 +66,7 @@ public class MyAccountPage extends BasePage {
 		spPage = new SpamPromoPage(driver);
 		spuPage = new SpamPromoUnreadPage(driver);
 		sdPage = new SnoozedPage(driver);
+		smfiPage = new SnoozedMailFromInbox(driver);		
 		cpPage = new ComposePage(driver);
 		cpdPage = new ComposeWithDraftPage(driver);
 
@@ -719,6 +721,90 @@ public class MyAccountPage extends BasePage {
 
 		log.info(" COMPLETED: Template Page Verification ");
 	}
+	
+	public void verifySnoozedMailFromInbox() throws IOException, InterruptedException {
+
+		log.info(" STARTING: Snoozed Mail From Inbox Page Verification ");		
+		ruse.mailCountInSnoozedBeforeRe();
+		ruse.clickforRefreshInboxRe();
+		
+	/*	log.info("Checking if Inbox button is visible...");
+		smfiPage.isInboxBtnDisplayed();
+		log.info("Inbox button is visible.");
+
+		log.info("Clicking button button...");
+		smfiPage.clickInboxBtn();
+		log.info("Clicked button button.");
+
+		log.info("Switching to Inbox page frame (My Account Frame Ic)...");
+		smfiPage.switchToMyAccountFramesIcForInbox();
+		log.info("Switched to Inbox page frame successfully.");*/
+
+		log.info("Fetching total email count from Inbox Page...");
+		int count = ruse.areCountOfTotalMailInPageRe();
+		log.info("Total Email Count on Inbox Page: {}", count);
+
+		if (count >= 4) {
+
+			log.info("Clicking First Mail On Inbox Page...");
+			smfiPage.clickFirstMailSubjectOnInbox();
+			log.info("Clicked First Mail On Inbox Page.");
+			
+			log.info("Switching to Inbox page frame (Ic to ifViewMail1)...");
+			smfiPage.switchToifViewMail1FrameFromIcFrame();
+			log.info("Switched to ifViewMail1 frame successfully.");
+			
+			log.info("Checking Cross button is visible or not on popup...");
+			smfiPage.isCrossBtnFromOpenedMailDisplayed();
+			log.info(" Cross button is visible...");
+			
+			log.info("Trying to Click Cross button...");
+			smfiPage.clickCrossBtnFromOpenedMail();
+			log.info("Cross button is Clicked ...");
+
+			log.info("Checking Snoozed button is visible or not...");
+			smfiPage.isSnoozedBtnDisplayedInOpenedMail();
+			log.info(" Snoozed button is visible...");
+			
+			log.info("Trying to Click Snoozed button...");
+			smfiPage.clickSnoozedBtnInOpenedMail();
+			log.info("Snoozed button is Clicked ...");
+			
+			log.info("Checking 28th date is visible or not on Calendar...");
+			smfiPage.isDateDisplayedOnCalendar();
+			log.info(" 28th date is visible on Calendar...");
+			
+			log.info("Trying to Click on 28 date on Calendar...");
+			smfiPage.clickOnDateDisplayedOnCalendar();
+			log.info("28 date button is Clicked ...");
+			
+			log.info("Checking Selected date is visible or not on Calendar...");
+			smfiPage.isdateAboveSnoozeBtnOnCalendarDisplayed();
+			smfiPage.validateDateWithSelectedDate();
+			log.info("Selected date button is visible ...");
+			
+			log.info("Checking Snooze Button is visible or not on Calendar...");
+			smfiPage.isSnoozeBtnOnCalendarDisplayed();
+			log.info(" Snooze Button is visible on Calendar...");
+			
+			log.info("Trying to Click on Snooze Button on Calendar...");
+			smfiPage.clickSnoozeBtnOnCalendar();
+			log.info("Snooze Button is Clicked ...");
+			
+			log.info("Trying to check that count of mail in Snoozed Page is increased or not after snoozing mail from Inbox...");
+			ruse.mailCountInSnoozedAfterRe();
+			log.info(" count of mail in Snoozed Page is increased after snoozing mail from Inbox...");
+			
+		} else {
+
+			log.error("Total Number of Emails in Snoozed Page is LESS than 4. Cannot proceed.");
+			Assert.assertTrue(count <= 4,
+					"Total Number of Emails in Snoozed Page are less than 4 so test cannot continue.");
+		}
+
+		log.info(" COMPLETED: Snoozed Page Verification ");
+	}
+
 
 	public void verifySnoozedPage() throws IOException, InterruptedException {
 
@@ -806,6 +892,8 @@ public class MyAccountPage extends BasePage {
 	public void verifySpamPromoPage() throws IOException, InterruptedException {
 
 		log.info(" STARTING: Spam-Promo Page Verification ");
+		
+		
 
 		log.info("Checking if Spam-Promo button is visible...");
 		spPage.isSpamPromoBtnDisplayed();
@@ -881,7 +969,8 @@ public class MyAccountPage extends BasePage {
 			log.info("Opening Quick View on Spam-Promo Page...");
 			spPage.isQuickViewBoxDisplayedForSpamPromo();
 			spPage.clickQuickViewBoxForSpamPromo();
-			spPage.reclickQuickViewBoxForSpamPromo();
+			spPage.reclickQuickViewBoxForSpamPromo();			
+			
 
 		} else {
 

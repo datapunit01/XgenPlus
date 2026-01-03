@@ -248,6 +248,9 @@ public class ReusableForUnread extends BasePage {
 
 	@FindBy(xpath = "//p[@id='subject0']//font")
 	public WebElement sentSubjectText;
+	
+	@FindBy(xpath = "//p[@id='subject0']//font")
+	public WebElement inboxSubjectText;
 
 	@FindBy(xpath = "//td[@id='CellE1']")
 	public WebElement mailDateAndTimeofFirst;
@@ -269,11 +272,14 @@ public class ReusableForUnread extends BasePage {
 
 	@FindBy(xpath = "//span[text()='Snoozed']")
 	public WebElement snoozedBtn;
+	
+	@FindBy(xpath = "//img[@id='imgSnooze']")
+	public WebElement snoozedBtnInOpenedMail;
 
 	@FindBy(xpath = "//span[text()='Spam-Promo']")
 	public WebElement spamPromoBtn;
 
-	@FindBy(xpath = "//span[starts-with(@id, 'SpnNew-23-')]")
+	@FindBy(xpath = "//span[starts-with(@id, 'SpnNew-2-')]")
 	public WebElement spamPromoUnreadBtn;
 
 	@FindBy(xpath = "//span[text()='More']")
@@ -370,6 +376,19 @@ public class ReusableForUnread extends BasePage {
 
 	@FindBy(xpath = "//span[@id='newComposeClose_0']//*[name()='svg']")
 	public WebElement composeCrossBtn;
+	
+	@FindBy(xpath = "//div[normalize-space()='28']")
+	public WebElement dateInCalendar;
+	
+	@FindBy(xpath = "//div[@class='guided-tour-step-tooltip guided-tour-arrow-top']//span[@title='End tour']//*[name()='svg']")
+	public WebElement CrossBtnFromOpenedMailPopUp;
+	
+	@FindBy(xpath = "//div[@class='dpt_modal-button']")
+	public WebElement snoozeBtnOnCalendar;
+	
+	@FindBy(xpath = "//div[@id='time-line']")
+	public WebElement dateAboveSnoozeBtnOnCalendar;
+
 
 	/*
 	 * @FindBy(xpath = "//input[contains(@id,'customInlineImage')]") public
@@ -419,8 +438,8 @@ public class ReusableForUnread extends BasePage {
 		WebElement mcFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("MC")));
 		driver.switchTo().frame(mcFrame);
 		System.out.println(" Switched to MC frames");
-	}
-
+	}	
+	
 	public void switchToInboxFrameIc()
 
 	{
@@ -454,7 +473,7 @@ public class ReusableForUnread extends BasePage {
 
 		WebElement ifViewMailFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ifViewMail1")));
 		driver.switchTo().frame(ifViewMailFrame);
-		System.out.println(" Switched to FM → ifViewMail1 frames");
+		System.out.println(" Switched to VC → ifViewMail1 frames");
 	}
 
 	public boolean isInboxDisplayedRe() {
@@ -872,6 +891,14 @@ public class ReusableForUnread extends BasePage {
 	public void clickSnoozedBtnRe() {
 		safeClick(snoozedBtn, " Snoozed  button is Clicked successfully from menu bar .");
 	}
+	
+	public boolean isSnoozedBtnDisplayedInOpenedMailRe() {
+		return isElementDisplayed(snoozedBtnInOpenedMail, " Snoozed button is successfully visible in Opened mail.");
+	}
+
+	public void clickSnoozedBtnInOpenedMailRe() {
+		safeClick(snoozedBtnInOpenedMail, " Snoozed  button is Clicked successfully in Opened mail.");
+	}
 
 	public boolean isSpamPromoBtnDisplayedRe() {
 		return isElementDisplayed(spamPromoBtn, " Spam-Promo button is successfully visible.");
@@ -1050,6 +1077,42 @@ public class ReusableForUnread extends BasePage {
 
 	public void clickOnComposeCrossBtnRe() {
 		safeClick(composeCrossBtn, " Cross Btn Clicked successfully.");
+	}
+	
+	public boolean isMailDisplayedOnInboxRe() {
+		return isElementDisplayed(inboxSubjectText, " Mail is successfully visible On Inbox page.");
+	}
+
+	public void clickOnMailDisplayedOnInboxRe() {
+		safeClick(inboxSubjectText, " First Mail Clicked successfully On Inbox page.");
+	}
+	
+	public boolean isDateDisplayedOnCalendarRe() {
+		return isElementDisplayed(dateInCalendar, " Date 28 is visible on calendar after clicked on Snoozed button.");
+	}
+
+	public void clickOnDateDisplayedOnCalendarRe() {
+		safeClick(dateInCalendar, "  Date 28 Clicked successfully on calendar page.");
+	}
+	
+	public boolean isCrossBtnFromOpenedMailDisplayedRe() {
+		return isElementDisplayed(CrossBtnFromOpenedMailPopUp, " Cross Btton is visible after mail open first time.");
+	}
+
+	public void clickCrossBtnFromOpenedMailRe() {
+		safeClick(CrossBtnFromOpenedMailPopUp, "  Cross Btton is clicked successfully from first time opened mail.");
+	}
+	
+	public boolean isSnoozeBtnOnCalendarDisplayedRe() {
+		return isElementDisplayed(snoozeBtnOnCalendar, " Snooze Btton is visible on calendar.");
+	}
+
+	public void clickSnoozeBtnOnCalendarRe() {
+		safeClick(snoozeBtnOnCalendar, "  Snooze Btton is clicked successfully from calendar.");
+	}
+	
+	public boolean isdateAboveSnoozeBtnOnCalendarDisplayedRe() {
+		return isElementDisplayed(dateAboveSnoozeBtnOnCalendar, " Snooze Btton is visible on calendar.");
 	}
 
 	public void clickReChkMainBox() throws InterruptedException {
@@ -1905,6 +1968,45 @@ public class ReusableForUnread extends BasePage {
 				+ ", and Total Count of Mail In Inbox After : " + afterCountInInbox);
 
 	}
+	
+	public int mailCountInSnoozedBeforeMove;
+
+	public void mailCountInSnoozedBeforeRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Snoozed Before Move ==========");
+		switchToMyAccountFrames();
+		clickSnoozedBtnRe();
+		switchToUnReadInboxFrameMc();
+		List<WebElement> checkboxesInSnoozed = listCheckBox;
+		int Count = checkboxesInSnoozed.size();
+		log.info("Total Count of Mail in Snoozed BEFORE move: {}", Count);
+		System.out.println("Total Count of Mail In Snoozed Before : " + Count);
+		mailCountInSnoozedBeforeMove = Count;
+		log.info("Stored mail count before move: {}", mailCountInSnoozedBeforeMove);
+		log.info("========== COMPLETED: Mail Count in Snoozed (Before Move) ==========");
+		
+
+	}
+
+	public void mailCountInSnoozedAfterRe() throws InterruptedException {
+		log.info("========== STARTING: Mail Count in Snoozed After Move ==========");
+		switchToMyAccountFrames();
+		clickSnoozedBtnRe();
+		switchToUnReadInboxFrameMc();
+		List<WebElement> checkboxesInSnoozed = listCheckBox;
+		int afterCountInSnoozed = checkboxesInSnoozed.size();
+		log.info("Total Count of Mail in Trash AFTER move: {}", afterCountInSnoozed);
+		// String timestampOfmail = mailDateAndTimeofFirst.getAttribute("title");
+		// System.out.println("Selected checkbox's Value : " + timestampOfmail);
+		  log.info("Verifying mail count has increased after moving mail to Trash...");
+		Assert.assertTrue(afterCountInSnoozed > mailCountInSnoozedBeforeMove,
+				" Mail count in Snoozed folder should be increased after moving mail to Snoozed folder.");
+		log.info("Mail count validation successful.");
+		System.out.println("Total Count of Mail In Snoozed Before : " + mailCountInSnoozedBeforeMove
+				+ ", and Total Count of Mail In Snoozed After : " + afterCountInSnoozed);
+		switchToMyAccountFrames();
+
+	}
+	
 
 	public void moveToTrashInboxRe() throws InterruptedException {
 		mailCountInTrashBeforeRe();

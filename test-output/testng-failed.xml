@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite thread-count="3" parallel="tests" name="Failed suite [CrossBrowserSuite]" guice-stage="DEVELOPMENT">
+  <listeners>
+    <listener class-name="utilities.ExtentTestListener"/>
+  </listeners>
   <test thread-count="3" parallel="tests" name="ChromeTest(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="testCases.T002_HomePageTest">
+      <class name="testCases.T004_SnoozedMailFromInbox">
         <methods>
-          <include name="verify_HomePage"/>
+          <include name="captureFailureScreenshot"/>
           <include name="tearDown"/>
           <include name="sendLogsAfterSuite"/>
           <include name="switchToLoginFrame"/>
           <include name="setup"/>
+          <include name="verify_SnoozedMailFromInbox"/>
         </methods>
-      </class> <!-- testCases.T002_HomePageTest -->
+      </class> <!-- testCases.T004_SnoozedMailFromInbox -->
     </classes>
   </test> <!-- ChromeTest(failed) -->
 </suite> <!-- Failed suite [CrossBrowserSuite] -->

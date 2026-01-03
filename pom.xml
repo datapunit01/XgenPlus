@@ -34,15 +34,22 @@
             <version>7.10.2</version>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>5.1.1</version>
+        </dependency>
 
-        <!-- WebDriverManager -->
+
+		<!-- WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.9.2</version>
         </dependency>
 
-        <!-- Log4j2 ONLY (single logger implementation) -->
+		<!-- Log4j2 ONLY (single logger implementation) -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -54,14 +61,14 @@
             <version>2.23.1</version>
         </dependency>
 
-        <!-- Mail -->
+		<!-- Mail -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>2.0.1</version>
         </dependency>
-        
-        <!-- Apache POI -->
+
+		<!-- Apache POI -->
 <dependency>
     <groupId>org.apache.poi</groupId>
     <artifactId>poi</artifactId>
