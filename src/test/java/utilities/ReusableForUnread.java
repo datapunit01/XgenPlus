@@ -456,7 +456,7 @@ public class ReusableForUnread extends BasePage {
 
 		System.out.println(" Switched to Default → FB frames");
 	}
-
+/*
 	public void switchToMyAccountFramesIfViewMail1Re() {
 		driver.switchTo().defaultContent();
 		WebElement fbFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("FB")));
@@ -475,6 +475,28 @@ public class ReusableForUnread extends BasePage {
 		driver.switchTo().frame(ifViewMailFrame);
 		System.out.println(" Switched to VC → ifViewMail1 frames");
 	}
+	*/
+	public void switchToMyAccountFramesIfViewMail1Re() {	  
+
+	    driver.switchTo().defaultContent();
+
+	    // FB
+	    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("FB"));
+	    System.out.println(" Switched to FB frame");
+
+	    // FM
+	    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("FM"));
+	    System.out.println(" Switched to FM frame");
+
+	    // VC
+	    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("VC"));
+	    System.out.println(" Switched to VC frame");
+
+	    // ifViewMail1 (MOST IMPORTANT)
+	    wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("ifViewMail1"));
+	    System.out.println(" Switched to ifViewMail1 frame");
+	}
+
 
 	public boolean isInboxDisplayedRe() {
 		return isElementDisplayed(inboxBtn, "Inbox icon is Visible");

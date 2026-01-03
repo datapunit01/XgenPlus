@@ -17,7 +17,7 @@ public class BasePage {
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver,this);
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		FileReader file=new FileReader("./src//test//resources//config.properties");
 		p=new Properties();
 		p.load(file);
