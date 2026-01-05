@@ -45,7 +45,7 @@ public class BaseClass {
 		FileReader file = new FileReader("./src/test/resources/config.properties");
 		p = new Properties();
 		p.load(file);
-		
+		/*		
 		// Browser setup
 		switch (br.toLowerCase()) {
 		case "chrome":
@@ -63,14 +63,14 @@ public class BaseClass {
 		default:
 			throw new IllegalArgumentException("❌ Invalid browser: " + br);
 		}
-	
-		/*		// Headless Browser setup
+	*/
+		// Headless Browser setup
 		switch (br.toLowerCase()) {
 
 		case "chrome":
 		    WebDriverManager.chromedriver().setup();
 		    ChromeOptions chromeOptions = new ChromeOptions();
-		    chromeOptions.addArguments("--headless=new");
+		  //  chromeOptions.addArguments("--headless=new");
 		    chromeOptions.addArguments("--no-sandbox");
 		    chromeOptions.addArguments("--disable-dev-shm-usage");
 		    chromeOptions.addArguments("--window-size=1920,1080");
@@ -98,7 +98,7 @@ public class BaseClass {
 		default:
 		    throw new IllegalArgumentException("Invalid browser: " + br);
 		}
-	*/
+	
 
 		getDriver().manage().deleteAllCookies();
 		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
