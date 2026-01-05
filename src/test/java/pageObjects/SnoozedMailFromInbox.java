@@ -131,11 +131,14 @@ public class SnoozedMailFromInbox extends BasePage {
 	    switchToFrameSafely(By.id("FM"), wait);
 	    switchToFrameSafely(By.id("VC"), wait);
 
-	    //  FINAL iframe (use By, NOT String)
-	    switchToFrameSafely(
-	        By.xpath("//tr[@id='trifViewMail1']//iframe[@name='ifViewMail1']"),
-	        wait
-	    );
+	 // wait for iframe to exist first
+	    By viewMailIframe = By.xpath("//tr[@id='trifViewMail1']//iframe");
+
+	    wait.until(ExpectedConditions.presenceOfElementLocated(viewMailIframe));
+	    wait.until(ExpectedConditions.visibilityOfElementLocated(viewMailIframe));
+
+	    // now switch
+	    switchToFrameSafely(viewMailIframe, wait);
 	}
 
 	private void switchToFrameSafely(By frameLocator, WebDriverWait wait) {
