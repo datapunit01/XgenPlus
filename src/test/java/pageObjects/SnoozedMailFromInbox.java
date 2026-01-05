@@ -136,10 +136,10 @@ public class SnoozedMailFromInbox extends BasePage {
 	    for (int attempt = 1; attempt <= 3; attempt++) {
 	        try {
 	            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameId));
-	            System.out.println("✅ Switched to frame: " + frameId);
+	            System.out.println(" Switched to frame: " + frameId);
 	            return;
 	        } catch (TimeoutException e) {
-	            System.out.println("⚠️ Attempt " + attempt + " failed for frame: " + frameId);
+	            System.out.println(" Attempt " + attempt + " failed for frame: " + frameId);
 	            if (attempt == 3) {
 	                throw e;
 	            }
