@@ -3,6 +3,8 @@ package pageObjects;
 import java.io.IOException;
 import java.net.IDN;
 import java.time.Duration;
+
+import org.openqa.selenium.By;
 //import java.util.concurrent.TimeoutException;
 import org.openqa.selenium.TimeoutException;
 
@@ -125,21 +127,26 @@ public class SnoozedMailFromInbox extends BasePage {
 
 	    driver.switchTo().defaultContent();
 
-	    switchToFrameSafely("FB", wait);
-	    switchToFrameSafely("FM", wait);
-	    switchToFrameSafely("VC", wait);
-	    switchToFrameSafely("ifViewMail1", wait);
+	    switchToFrameSafely(By.id("FB"), wait);
+	    switchToFrameSafely(By.id("FM"), wait);
+	    switchToFrameSafely(By.id("VC"), wait);
+
+	    //  FINAL iframe (use By, NOT String)
+	    switchToFrameSafely(
+	        By.xpath("//tr[@id='trifViewMail1']//iframe[@name='ifViewMail1']"),
+	        wait
+	    );
 	}
 
-	private void switchToFrameSafely(String frameId, WebDriverWait wait) {
+	private void switchToFrameSafely(By frameLocator, WebDriverWait wait) {
 
 	    for (int attempt = 1; attempt <= 3; attempt++) {
 	        try {
-	            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameId));
-	            System.out.println(" Switched to frame: " + frameId);
+	            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameLocator));
+	            
 	            return;
 	        } catch (TimeoutException e) {
-	            System.out.println(" Attempt " + attempt + " failed for frame: " + frameId);
+	        	System.out.println(" Attempt " + attempt + " failed for frame: " + frameLocator);
 	            if (attempt == 3) {
 	                throw e;
 	            }
