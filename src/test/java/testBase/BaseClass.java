@@ -138,11 +138,13 @@ public class BaseClass {
 
 	            // ❗ DO NOT FORCE HEADLESS
 	            if (isJenkins) {
-	                chromeOptions.addArguments("--start-maximized");
-	                chromeOptions.addArguments("--disable-gpu");
-	                chromeOptions.addArguments("--disable-notifications");
-	                chromeOptions.addArguments("--disable-infobars");
-	                chromeOptions.addArguments("--disable-extensions");
+	            	chromeOptions.addArguments("--no-sandbox");
+	            	chromeOptions.addArguments("--disable-dev-shm-usage");
+	            	chromeOptions.addArguments("--window-size=1920,1080");
+	            	chromeOptions.addArguments("--disable-gpu");
+	            	chromeOptions.addArguments("--disable-notifications");
+	            	chromeOptions.addArguments("--disable-extensions");
+	            	chromeOptions.addArguments("--disable-blink-features=AutomationControlled");
 	            }
 
 	            chromeOptions.addArguments("--window-size=1920,1080");
