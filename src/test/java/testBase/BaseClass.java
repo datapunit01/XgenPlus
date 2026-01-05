@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import utilities.ScreenshotUtil;
+import utilities.ExecutionEnvironment;
 
 
 public class BaseClass {
@@ -38,9 +39,8 @@ public class BaseClass {
 		return driver.get();
 	}
 
-	@BeforeClass
-	@Parameters("browser")
-	public void setup(String br) throws IOException {
+	
+/*	public void setup(String br) throws IOException {
 		// Load config.properties
 		FileReader file = new FileReader("./src/test/resources/config.properties");
 		p = new Properties();
@@ -63,7 +63,7 @@ public class BaseClass {
 		default:
 			throw new IllegalArgumentException("❌ Invalid browser: " + br);
 		}
-	*/
+	
 		// Headless Browser setup
 		switch (br.toLowerCase()) {
 
@@ -109,7 +109,93 @@ public class BaseClass {
 		logger = LogManager.getLogger(this.getClass());
 		logger.info(" Browser launched: " + br);
 		logger.info(" Application URL opened: " + p.getProperty("appURL"));
+	}*/
+	
+	@BeforeClass
+	@Parameters("browser")
+	public void setup(String br) throws IOException {
+
+	    // Load config.properties
+	    FileReader file = new FileReader("./src/test/resources/config.properties");
+	    p = new Properties();
+	    p.load(file);
+
+	    boolean isJenkins = ExecutionEnvironment.isRunningOnJenkins();
+
+	    logger = LogManager.getLogger(this.getClass());
+
+	    if (isJenkins) {
+	        logger.info("🚀 Running on JENKINS (Windows)");
+	    } else {
+	        logger.info("🖥️ Running on LOCAL machine");
+	    }
+
+	    switch (br.toLowerCase()) {
+
+	        case "chrome":
+	            WebDriverManager.chromedriver().setup();
+	            ChromeOptions chromeOptions = new ChromeOptions();
+
+	            // ❗ DO NOT FORCE HEADLESS
+	            if (isJenkins) {
+	                chromeOptions.addArguments("--start-maximized");
+	                chromeOptions.addArguments("--disable-gpu");
+	                chromeOptions.addArguments("--disable-notifications");
+	                chromeOptions.addArguments("--disable-infobars");
+	                chromeOptions.addArguments("--disable-extensions");
+	            }
+
+	            chromeOptions.addArguments("--window-size=1920,1080");
+	            chromeOptions.addArguments("--no-sandbox");
+	            chromeOptions.addArguments("--disable-dev-shm-usage");
+
+	            driver.set(new ChromeDriver(chromeOptions));
+	            break;
+
+	        case "firefox":
+	            WebDriverManager.firefoxdriver().setup();
+	            FirefoxOptions firefoxOptions = new FirefoxOptions();
+
+	            if (isJenkins) {
+	                // ❗ Do NOT add headless unless required
+	                firefoxOptions.addArguments("--width=1920");
+	                firefoxOptions.addArguments("--height=1080");
+	            }
+
+	            driver.set(new FirefoxDriver(firefoxOptions));
+	            break;
+
+	        case "edge":
+	            WebDriverManager.edgedriver().setup();
+	            EdgeOptions edgeOptions = new EdgeOptions();
+
+	            if (isJenkins) {
+	                edgeOptions.addArguments("--start-maximized");
+	            }
+
+	            driver.set(new EdgeDriver(edgeOptions));
+	            break;
+
+	        default:
+	            throw new IllegalArgumentException("❌ Invalid browser: " + br);
+	    }
+
+	    getDriver().manage().deleteAllCookies();
+	    getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+	    getDriver().manage().window().maximize();
+	    getDriver().get(p.getProperty("appURL"));
+
+	    // ✅ Jenkins-aware explicit wait
+	    if (isJenkins) {
+	        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(40));
+	    } else {
+	        wait = new WebDriverWait(getDriver(), Duration.ofSeconds(20));
+	    }
+
+	    logger.info("Browser launched: " + br);
+	    logger.info("Application URL opened: " + p.getProperty("appURL"));
 	}
+
 
 	@BeforeMethod
 	public void switchToLoginFrame() {

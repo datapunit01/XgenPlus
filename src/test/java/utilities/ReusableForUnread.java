@@ -474,8 +474,8 @@ public class ReusableForUnread extends BasePage {
 		WebElement ifViewMailFrame = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ifViewMail1")));
 		driver.switchTo().frame(ifViewMailFrame);
 		System.out.println(" Switched to VC → ifViewMail1 frames");
-	}
-	*/
+	}*/
+	
 	public void switchToMyAccountFramesIfViewMail1Re() {	  
 
 	    driver.switchTo().defaultContent();
@@ -497,6 +497,7 @@ public class ReusableForUnread extends BasePage {
 	    System.out.println(" Switched to ifViewMail1 frame");
 	}
 
+	
 
 	public boolean isInboxDisplayedRe() {
 		return isElementDisplayed(inboxBtn, "Inbox icon is Visible");

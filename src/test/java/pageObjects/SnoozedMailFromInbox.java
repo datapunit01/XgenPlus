@@ -2,12 +2,18 @@ package pageObjects;
 
 import java.io.IOException;
 import java.net.IDN;
+import java.time.Duration;
+//import java.util.concurrent.TimeoutException;
+import org.openqa.selenium.TimeoutException;
+
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
+import utilities.ExecutionEnvironment;
 import utilities.ReusableForUnread;
 
 public class SnoozedMailFromInbox extends BasePage {
@@ -49,7 +55,7 @@ public class SnoozedMailFromInbox extends BasePage {
 	}
 	
 	public void switchToifViewMail1FrameFromIcFrame() {
-		ruse.switchToMyAccountFramesIfViewMail1Re();
+		switchToMyAccountFrames();
 
 	}
 	
@@ -106,6 +112,40 @@ public class SnoozedMailFromInbox extends BasePage {
 		
 	}
 
+	public void switchToMyAccountFrames() {
 	
+	    WebDriverWait wait;
+
+	    // Jenkins needs more time
+	    if (ExecutionEnvironment.isRunningOnJenkins()) {
+	        wait = new WebDriverWait(driver, Duration.ofSeconds(45));
+	    } else {
+	        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+	    }
+
+	    driver.switchTo().defaultContent();
+
+	    switchToFrameSafely("FB", wait);
+	    switchToFrameSafely("FM", wait);
+	    switchToFrameSafely("VC", wait);
+	    switchToFrameSafely("ifViewMail1", wait);
+	}
+
+	private void switchToFrameSafely(String frameId, WebDriverWait wait) {
+
+	    for (int attempt = 1; attempt <= 3; attempt++) {
+	        try {
+	            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameId));
+	            System.out.println("✅ Switched to frame: " + frameId);
+	            return;
+	        } catch (TimeoutException e) {
+	            System.out.println("⚠️ Attempt " + attempt + " failed for frame: " + frameId);
+	            if (attempt == 3) {
+	                throw e;
+	            }
+	        }
+	    }
+	}
+
 
 }

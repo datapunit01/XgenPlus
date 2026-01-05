@@ -9,6 +9,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
+
 public class BasePage {
 	public WebDriverWait wait;
 	public WebDriver driver;
@@ -17,12 +19,12 @@ public class BasePage {
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver,this);
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(40));
 		FileReader file=new FileReader("./src//test//resources//config.properties");
 		p=new Properties();
 		p.load(file);
 	}
 	
-    
+	
 
 }
