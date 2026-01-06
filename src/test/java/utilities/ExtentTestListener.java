@@ -14,8 +14,14 @@ import testBase.BaseClass;
 
 public class ExtentTestListener extends BaseClass implements ITestListener {
 
-    private static ExtentReports extent = ExtentReportManager.getExtentReport();
+    private ExtentReports extent;
     private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+
+    @Override
+    public void onStart(ITestContext context) {
+        extent = ExtentReportManager.getExtentReport();
+        System.out.println("Extent initialized");
+    }
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -40,11 +46,11 @@ public class ExtentTestListener extends BaseClass implements ITestListener {
     @Override
     public void onFinish(ITestContext context) {
         extent.flush();
+        System.out.println("Extent flushed successfully");
     }
-
     private String captureScreenshot(String testName) {
         String path = System.getProperty("user.dir")
-                + "/screenshots/" + testName + ".png";
+                + "/reports/screenshots/" + testName + ".png";
         try {
             File src = ((TakesScreenshot) getDriver()).getScreenshotAs(OutputType.FILE);
             Files.copy(src.toPath(), Paths.get(path));
