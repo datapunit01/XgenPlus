@@ -2,12 +2,12 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-01-05T10:02:56 IST" name="CrossBrowserSuite" finished-at="2026-01-05T10:05:16 IST" duration-ms="139779">
+  <suite started-at="2026-01-06T11:07:52 IST" name="CrossBrowserSuite" finished-at="2026-01-06T11:10:26 IST" duration-ms="154077">
     <groups>
     </groups>
-    <test started-at="2026-01-05T10:02:56 IST" name="ChromeTest" finished-at="2026-01-05T10:05:16 IST" duration-ms="139779">
+    <test started-at="2026-01-06T11:07:52 IST" name="ChromeTest" finished-at="2026-01-06T11:10:26 IST" duration-ms="154077">
       <class name="testCases.T004_SnoozedMailFromInbox">
-        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:02:56 IST" name="setup" finished-at="2026-01-05T10:03:03 IST" duration-ms="6686" status="PASS">
+        <test-method is-config="true" signature="setup(java.lang.String)[pri:0, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:07:52 IST" name="setup" finished-at="2026-01-06T11:07:59 IST" duration-ms="6680" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -18,30 +18,30 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method is-config="true" signature="switchToLoginFrame()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:03:03 IST" name="switchToLoginFrame" finished-at="2026-01-05T10:03:03 IST" duration-ms="61" status="PASS">
+        <test-method is-config="true" signature="switchToLoginFrame()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:07:59 IST" name="switchToLoginFrame" finished-at="2026-01-06T11:07:59 IST" duration-ms="90" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- switchToLoginFrame -->
-        <test-method signature="verify_SnoozedMailFromInbox()[pri:1, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:03:03 IST" name="verify_SnoozedMailFromInbox" finished-at="2026-01-05T10:05:15 IST" duration-ms="132437" status="PASS">
+        <test-method signature="verify_SnoozedMailFromInbox()[pri:1, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:07:59 IST" name="verify_SnoozedMailFromInbox" finished-at="2026-01-06T11:10:26 IST" duration-ms="146864" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- verify_SnoozedMailFromInbox -->
-        <test-method is-config="true" signature="captureFailureScreenshot(org.testng.ITestResult)[pri:0, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:05:15 IST" name="captureFailureScreenshot" finished-at="2026-01-05T10:05:15 IST" duration-ms="2" status="PASS">
+        <test-method is-config="true" signature="captureFailureScreenshot(org.testng.ITestResult)[pri:0, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:10:26 IST" name="captureFailureScreenshot" finished-at="2026-01-06T11:10:26 IST" duration-ms="4" status="PASS">
           <params>
             <param index="0">
               <value>
-                <![CDATA[[TestResult name=verify_SnoozedMailFromInbox status=SUCCESS method=T004_SnoozedMailFromInbox.verify_SnoozedMailFromInbox()[pri:1, instance:testCases.T004_SnoozedMailFromInbox@16612a51] output={null}]]]>
+                <![CDATA[[TestResult name=verify_SnoozedMailFromInbox status=SUCCESS method=T004_SnoozedMailFromInbox.verify_SnoozedMailFromInbox()[pri:1, instance:testCases.T004_SnoozedMailFromInbox@4b86805d] output={null}]]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- captureFailureScreenshot -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:05:15 IST" name="tearDown" finished-at="2026-01-05T10:05:16 IST" duration-ms="530" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:10:26 IST" name="tearDown" finished-at="2026-01-06T11:10:26 IST" duration-ms="350" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-        <test-method is-config="true" signature="sendLogsAfterSuite()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@16612a51]" started-at="2026-01-05T10:05:16 IST" name="sendLogsAfterSuite" finished-at="2026-01-05T10:05:22 IST" duration-ms="6221" status="PASS">
+        <test-method is-config="true" signature="sendLogsAfterSuite()[pri:0, instance:testCases.T004_SnoozedMailFromInbox@4b86805d]" started-at="2026-01-06T11:10:27 IST" name="sendLogsAfterSuite" finished-at="2026-01-06T11:10:33 IST" duration-ms="6271" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- sendLogsAfterSuite -->
