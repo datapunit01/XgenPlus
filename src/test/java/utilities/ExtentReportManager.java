@@ -3,6 +3,7 @@ package utilities;
 import java.io.File;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 
 public class ExtentReportManager {
 
@@ -25,8 +26,15 @@ public class ExtentReportManager {
 
             //  STEP 3: Create Spark Reporter
             ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);
+           // Jenkins-safe config
+            spark.config().setTheme(Theme.STANDARD);
             spark.config().setReportName("Automation Test Report");
             spark.config().setDocumentTitle("Test Execution Results");
+            spark.config().setEncoding("utf-8");
+
+            // Prevent Jenkins CSP issues
+            spark.config().setCss("");
+            spark.config().setJs("");
 
             //  STEP 4: Attach report
             extent = new ExtentReports();
